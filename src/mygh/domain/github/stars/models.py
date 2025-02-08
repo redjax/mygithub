@@ -93,7 +93,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     ssh_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     clone_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     svn_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
-    homepage: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
+    homepage: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
     size: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     stargazers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     watchers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
@@ -105,11 +105,11 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     has_pages: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     has_discussions: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     forks_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    mirror_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
+    mirror_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
     archived: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     disabled: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     open_issues_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    license: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
+    license: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
     allow_forking: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     is_template: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     web_commit_signoff_required: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
@@ -136,7 +136,7 @@ class GithubRepositoryOwnerModel(db_lib.base.Base):
     id: so.Mapped[int] = so.mapped_column(sa.Integer, primary_key=True, autoincrement=True)
     login: so.Mapped[str] = so.mapped_column(sa.String, nullable=False, unique=True)
     node_id: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
-    avatar_url: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
+    avatar_url: so.Mapped[str] = so.mapped_column(sa.String, nullable=True, default=None)
     gravatar_id: so.Mapped[str] = so.mapped_column(sa.String, nullable=True)
     url: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
     html_url: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
