@@ -25,15 +25,18 @@ def main(api_token: str):
     session_pool = db_depends.get_session_pool()
     
     with session_pool() as session:
+        repo = stars_domain.GithubStarsAPIResponseRepository(session)
         db_model = stars_domain.GithubStarsAPIResponseModel(json_data=starred_repos)
-        
-        session.add(db_model)
-        session.commit()
-        session.refresh(db_model)
+                
+        db_model = repo.create(db_model)
         
         log.info(f"Saved [{db_model.id}] to database")
     
     log.debug(f"Saved github stars to database")
+    
+    starred_repos_response = stars_domain.GithubStarsAPIResponseOut.model_validate(db_model.__dict__)
+    log.info(starred_repos_response)
+    
 
 
 if __name__ == "__main__":
