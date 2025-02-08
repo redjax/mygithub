@@ -155,7 +155,7 @@ def save_github_stars(starred_repos: list[dict]) -> list[stars_domain.GithubStar
                 log.error(msg)
                 raise
 
-            log.info(f"Processed repository: {saved_repo.name} (ID: {saved_repo.repo_id})")
+            log.debug(f"Processed repository: {saved_repo.name} (ID: {saved_repo.repo_id})")
         
                 
     return saved_repos

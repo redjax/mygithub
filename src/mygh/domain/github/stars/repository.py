@@ -35,7 +35,7 @@ class GithubStarredRepositoryDBRepository(db_lib.base.BaseRepository[GithubStarr
             ).filter(GithubStarredRepositoryModel.repo_id == github_repo.repo_id).one_or_none()
 
             if existing_repo:
-                log.info(f"Existing repository found with repo_id '{github_repo.repo_id}'. Returning model")
+                log.debug(f"Existing repository found with repo_id '{github_repo.repo_id}'. Returning model")
                 return existing_repo
 
             ## Check if owner exists
