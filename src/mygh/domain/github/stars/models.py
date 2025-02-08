@@ -47,7 +47,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     name: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     private: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
     html_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
-    description: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
+    description: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True)
     fork: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
     url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     forks_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
@@ -97,7 +97,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     size: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     stargazers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     watchers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    language: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
+    language: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True)
     has_issues: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     has_projects: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     has_downloads: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
@@ -109,7 +109,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     archived: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     disabled: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     open_issues_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    license: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
+    license: so.Mapped[dict] = so.mapped_column(JSON, nullable=True)
     allow_forking: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     is_template: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
     web_commit_signoff_required: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
