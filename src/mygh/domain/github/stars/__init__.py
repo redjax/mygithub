@@ -1,3 +1,3 @@
-from .models import GithubStarsAPIResponseModel
-from .repository import GithubStarsAPIResponseRepository
+from .models import GithubStarsAPIResponseModel, GithubRepositoryOwnerModel, GithubStarredRepositoryModel
+from .repository import GithubStarsAPIResponseRepository, GithubStarredRepositoryDBRepository
 from .schemas import GithubStarsAPIResponseIn, GithubStarsAPIResponseOut
