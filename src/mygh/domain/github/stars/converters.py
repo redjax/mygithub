@@ -27,13 +27,6 @@ def convert_github_stars_api_response_schema_to_db_model(api_response: GithubSta
     return api_response_model
 
 def convert_github_stars_api_response_db_model_to_schema(api_response_model: GithubStarsAPIResponseModel) -> GithubStarsAPIResponseOut:
-    # api_response: GithubStarsAPIResponseOut = GithubStarsAPIResponseOut(
-    #     id=api_response_model.id,
-    #     json_data=api_response_model.json_data,
-    #     created_at=api_response_model.created_at,
-    #     updated_at=api_response_model.updated_at,
-    # )
-    
     api_response: GithubStarsAPIResponseOut = GithubStarsAPIResponseOut.model_validate(api_response_model.__dict__)
 
     return api_response
@@ -114,78 +107,6 @@ def convert_github_starred_repo_schema_to_db_model(starred_repo: GithubStarredRe
     return starred_repo_model
 
 def convert_github_starred_repo_db_model_to_schema(starred_repo_model: GithubStarredRepositoryModel) -> GithubStarredRepoOut:
-    # starred_repo: GithubStarredRepoOut = GithubStarredRepoOut(
-    #     id=starred_repo_model.repo_id,
-    #     node_id=starred_repo_model.node_id,
-    #     name=starred_repo_model.name,
-    #     description=starred_repo_model.description,
-    #     html_url=starred_repo_model.html_url,
-    #     stargazers_count=starred_repo_model.stargazers_count,
-    #     language=starred_repo_model.language,
-    #     private=starred_repo_model.private,
-    #     fork=starred_repo_model.fork,
-    #     url=starred_repo_model.url,
-    #     forks_url=starred_repo_model.forks_url,
-    #     keys_url=starred_repo_model.keys_url,
-    #     collaborators_url=starred_repo_model.collaborators_url,
-    #     teams_url=starred_repo_model.teams_url,
-    #     hooks_url=starred_repo_model.hooks_url,
-    #     issue_events_url=starred_repo_model.issue_events_url,
-    #     events_url=starred_repo_model.events_url,
-    #     assignees_url=starred_repo_model.assignees_url,
-    #     branches_url=starred_repo_model.branches_url,
-    #     tags_url=starred_repo_model.tags_url,
-    #     blobs_url=starred_repo_model.blobs_url,
-    #     git_tags_url=starred_repo_model.git_tags_url,
-    #     git_refs_url=starred_repo_model.git_refs_url,
-    #     trees_url=starred_repo_model.trees_url,
-    #     statuses_url=starred_repo_model.statuses_url,
-    #     languages_url=starred_repo_model.languages_url,
-    #     stargazers_url=starred_repo_model.stargazers_url,
-    #     contributors_url=starred_repo_model.contributors_url,
-    #     subscribers_url=starred_repo_model.subscribers_url,
-    #     subscription_url=starred_repo_model.subscription_url,
-    #     commits_url=starred_repo_model.commits_url,
-    #     git_commits_url=starred_repo_model.git_commits_url,
-    #     comments_url=starred_repo_model.comments_url,
-    #     issue_comment_url=starred_repo_model.issue_comment_url,
-    #     contents_url=starred_repo_model.contents_url,
-    #     compare_url=starred_repo_model.compare_url,
-    #     merges_url=starred_repo_model.merges_url,
-    #     archive_url=starred_repo_model.archive_url,
-    #     downloads_url=starred_repo_model.downloads_url,
-    #     issues_url=starred_repo_model.issues_url,
-    #     pulls_url=starred_repo_model.pulls_url,
-    #     milestones_url=starred_repo_model.milestones_url,
-    #     notifications_url=starred_repo_model.notifications_url,
-    #     labels_url=starred_repo_model.labels_url,    
-    #     releases_url=starred_repo_model.releases_url,
-    #     deployments_url=starred_repo_model.deployments_url,
-    #     created_at=starred_repo_model.created_at,
-    #     updated_at=starred_repo_model.updated_at,
-    #     pushed_at=starred_repo_model.pushed_at,
-    #     git_url=starred_repo_model.git_url,
-    #     has_issues=starred_repo_model.has_issues,
-    #     ssh_url=starred_repo_model.ssh_url,
-    #     clone_url=starred_repo_model.clone_url,
-    #     svn_url=starred_repo_model.svn_url,
-    #     homepage=starred_repo_model.homepage,
-    #     size=starred_repo_model.size,
-    #     forks_count=starred_repo_model.forks_count,
-    #     open_issues_count=starred_repo_model.open_issues_count,
-    #     license=starred_repo_model.license,
-    #     allow_forking=starred_repo_model.allow_forking,
-    #     is_template=starred_repo_model.is_template,
-    #     web_commit_signoff_required=starred_repo_model.web_commit_signoff_required,
-    #     topics=json.loads(starred_repo_model.topics),
-    #     visibility=starred_repo_model.visibility,
-    #     forks=starred_repo_model.forks,
-    #     open_issues=starred_repo_model.open_issues,
-    #     watchers=starred_repo_model.watchers,
-    #     default_branch=starred_repo_model.default_branch,
-    #     permissions=starred_repo_model.permissions
-    # )
-    
     starred_repo: GithubStarredRepoOut = GithubStarredRepoOut.model_validate(starred_repo_model.__dict__)
 
     return starred_repo
