@@ -7,9 +7,9 @@ log = logging.getLogger(__name__)
 
 import mygh.libs.db_lib as db
 from mygh.libs.settings import DB_SETTINGS
+
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-
 
 def get_db_uri(
     drivername: str = DB_SETTINGS.get("DB_DRIVERNAME", default="sqlite+pysqlite"),

@@ -1,12 +1,13 @@
-from loguru import logger as log
+from __future__ import annotations
+
 import json
 
-from mygh.libs import setup, settings
 from mygh.controllers import GithubAPIController
-from mygh.libs.depends import db_depends
-from mygh.libs import db_lib
 from mygh.domain.github import stars as stars_domain
+from mygh.libs import db_lib, settings, setup
+from mygh.libs.depends import db_depends
 
+from loguru import logger as log
 
 def main(api_token: str):
     log.debug("Setting up Github API controller")

@@ -1,12 +1,19 @@
-from loguru import logger as log
+from __future__ import annotations
 
 import typing as t
-from .models import GithubStarsAPIResponseModel, GithubStarredRepositoryModel, GithubRepositoryOwnerModel
-from mygh.libs import db_lib
-import sqlalchemy as sa
-import sqlalchemy.orm as so
-import sqlalchemy.exc as sa_exc
 
+from mygh.libs import db_lib
+
+from .models import (
+    GithubRepositoryOwnerModel,
+    GithubStarredRepositoryModel,
+    GithubStarsAPIResponseModel,
+)
+
+from loguru import logger as log
+import sqlalchemy as sa
+import sqlalchemy.exc as sa_exc
+import sqlalchemy.orm as so
 
 class GithubStarsAPIResponseRepository(db_lib.base.BaseRepository[GithubStarsAPIResponseModel]):
     def __init__(self, session: so.Session):
@@ -17,8 +24,7 @@ class GithubStarredRepositoryDBRepository(db_lib.base.BaseRepository[GithubStarr
         super().__init__(session, GithubStarredRepositoryModel)
         
     def create_or_get_repo(self, github_repo: GithubStarredRepositoryModel, repo_owner: GithubRepositoryOwnerModel) -> GithubStarredRepositoryModel:
-        """
-        Creates a new repository and owner if they don't exist.
+        """Creates a new repository and owner if they don't exist.
         If a repository already exists, return it.
         If an owner exists but the repository does not, update the owner.
         """
@@ -71,8 +77,7 @@ class GithubStarredRepositoryDBRepository(db_lib.base.BaseRepository[GithubStarr
             raise exc
 
     def delete_repo(self, repo_id: int) -> None:
-        """
-        Deletes a repository if it exists.
+        """Deletes a repository if it exists.
         """
         repo = self.session.get(GithubStarredRepositoryModel, repo_id)
         if repo:

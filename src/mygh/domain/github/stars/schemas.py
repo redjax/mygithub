@@ -1,8 +1,10 @@
-from loguru import logger as log
-import typing as t
-from datetime import datetime
+from __future__ import annotations
 
-from pydantic import BaseModel, Field, field_validator, ValidationError, computed_field
+from datetime import datetime
+import typing as t
+
+from loguru import logger as log
+from pydantic import BaseModel, Field, ValidationError, computed_field, field_validator
 
 class GithubStarsAPIResponseBase(BaseModel):
     json_data: t.List[t.Dict[str, t.Any]] = Field(default_factory=[], repr=False)

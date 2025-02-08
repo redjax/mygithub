@@ -1,16 +1,13 @@
-from loguru import logger as log
+from __future__ import annotations
 
-import typing as t
-from pathlib import Path
-import json
 from contextlib import AbstractContextManager
+import json
+from pathlib import Path
+import typing as t
 
-from mygh.libs import settings
-from mygh.libs import http_lib
-from mygh.libs import db_lib
-from mygh.libs import core_utils
-from mygh.libs import depends
+from mygh.libs import core_utils, db_lib, depends, http_lib, settings
 
+from loguru import logger as log
 
 class GithubAPIController(AbstractContextManager):
     def __init__(

@@ -1,13 +1,15 @@
-import typing as t
+from __future__ import annotations
+
 from datetime import datetime
+import typing as t
 
 from mygh.libs import db_lib
 from mygh.libs.depends import db_depends
-import sqlalchemy as sa
-import sqlalchemy.orm as so
-import sqlalchemy.exc as sa_exc
-from sqlalchemy.types import JSON
 
+import sqlalchemy as sa
+import sqlalchemy.exc as sa_exc
+import sqlalchemy.orm as so
+from sqlalchemy.types import JSON
 
 class GithubStarsAPIResponseModel(db_lib.base.Base):
     __tablename__ = "gh_stars_api_response"

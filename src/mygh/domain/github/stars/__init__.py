@@ -1,3 +1,12 @@
-from .models import GithubStarsAPIResponseModel, GithubRepositoryOwnerModel, GithubStarredRepositoryModel
-from .repository import GithubStarsAPIResponseRepository, GithubStarredRepositoryDBRepository
+from __future__ import annotations
+
+from .models import (
+    GithubRepositoryOwnerModel,
+    GithubStarredRepositoryModel,
+    GithubStarsAPIResponseModel,
+)
+from .repository import (
+    GithubStarredRepositoryDBRepository,
+    GithubStarsAPIResponseRepository,
+)
 from .schemas import GithubStarsAPIResponseIn, GithubStarsAPIResponseOut

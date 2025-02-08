@@ -4,10 +4,10 @@ from pathlib import Path
 
 import mygh.libs.db_lib as db
 from mygh.libs.depends import db_depends
+
 from loguru import logger as log
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-
 
 def setup_database(
     sqla_base: so.DeclarativeBase = db.Base,
