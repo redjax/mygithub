@@ -4,11 +4,11 @@ import json
 from pathlib import Path
 import typing as t
 
+import mygh.client
 from mygh.controllers import GithubAPIController
 from mygh.domain.github import stars as stars_domain
 from mygh.libs import db_lib, settings, setup
 from mygh.libs.depends import db_depends
-import mygh.client
 
 from loguru import logger as log
 

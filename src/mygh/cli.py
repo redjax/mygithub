@@ -5,7 +5,6 @@ from mygh._cli.main import app as cli_app
 from cyclopts import App
 from loguru import logger as log
 
-
 def start_cli():
     try:
         cli_app.meta()

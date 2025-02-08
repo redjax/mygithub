@@ -1,18 +1,18 @@
-from loguru import logger as log
+from __future__ import annotations
 
 from pathlib import Path
 import typing as t
 
+from mygh import client
+from mygh.controllers import GithubAPIController
 from mygh.domain.github import stars as stars_domain
 from mygh.libs import settings
-from mygh.controllers import GithubAPIController
-from mygh import client
 
 from cyclopts import App, Group, Parameter
-
+from loguru import logger as log
 import sqlalchemy as sa
-import sqlalchemy.orm as so
 import sqlalchemy.exc as sa_exc
+import sqlalchemy.orm as so
 
 gh_stars_app = App(name="stars", help="Github starred repositories")
 

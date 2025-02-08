@@ -4,13 +4,12 @@ import json
 from pathlib import Path
 import typing as t
 
-from loguru import logger as log
-
-from mygh.libs.depends import db_depends
-from mygh.domain.github import stars as stars_domain
 from mygh.controllers import GithubAPIController
+from mygh.domain.github import stars as stars_domain
 from mygh.libs import settings
+from mygh.libs.depends import db_depends
 
+from loguru import logger as log
 
 def get_starred_repos(api_token: str = settings.GITHUB_SETTINGS.get("GH_API_TOKEN", default=None), use_cache: bool = False, cache_ttl: int = 900):
     gh_api_controller: GithubAPIController = GithubAPIController(api_token=api_token, use_cache=use_cache, cache_ttl=cache_ttl)

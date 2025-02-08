@@ -1,19 +1,18 @@
-from loguru import logger as log
+from __future__ import annotations
 
+import argparse
+from contextlib import AbstractContextManager
+import logging
 from pathlib import Path
 import typing as t
-import argparse
-import logging
-
-from contextlib import AbstractContextManager
-
-from mygh._cli._controller import AlembicController
 
 from alembic import command
 from alembic.config import Config
 from alembic.script import ScriptDirectory
+from mygh._cli._controller import AlembicController
 
 from cyclopts import App, Group, Parameter
+from loguru import logger as log
 
 alembic_app: App = App(name="alembic", help="CLI for Alembic operations.")
 

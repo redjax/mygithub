@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+import mygh.cli
+from mygh.libs import setup
+from mygh.libs.settings.logging_settings import LOGGING_SETTINGS
+
 from cyclopts import App
 from loguru import logger as log
-from mygh.libs.settings.logging_settings import LOGGING_SETTINGS
-from  mygh.libs import setup
-import mygh.cli
-
 
 def start_cli(app: App):
     try:

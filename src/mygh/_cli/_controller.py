@@ -1,22 +1,23 @@
-from loguru import logger as log
+from __future__ import annotations
 
+import argparse
+from contextlib import AbstractContextManager
+import logging
 from pathlib import Path
 import typing as t
-import argparse
-import logging
-
-from contextlib import AbstractContextManager
 
 from alembic import command
 from alembic.config import Config
 from alembic.script import ScriptDirectory
 
+from loguru import logger as log
 
 class AlembicController(AbstractContextManager):
     """Context manager for Alembic operations.
 
     Params:
         alembic_ini_path (str | Path, optional): Path to the Alembic configuration file. Defaults to "alembic.ini".
+
     Attributes:
         cfg_file (str): Path to the Alembic configuration file.
         config (Config | None): Alembic configuration object.
@@ -29,6 +30,7 @@ class AlembicController(AbstractContextManager):
 
     Raises:
         Exception: If an error occurs during Alembic operations.
+
     """
 
     def __init__(
@@ -81,6 +83,7 @@ class AlembicController(AbstractContextManager):
 
         Raises:
             Exception: If an error occurs during upgrade.
+
         """
         log.info(
             f"{'Simulating' if self.dry_run else 'Upgrading'} to revision: {revision}"
@@ -102,6 +105,7 @@ class AlembicController(AbstractContextManager):
 
         Raises:
             Exception: If an error occurs during downgrade.
+
         """
         log.info(
             f"{'Simulating' if self.dry_run else 'Downgrading'} to revision: {revision}"
@@ -151,6 +155,7 @@ class AlembicController(AbstractContextManager):
 
         Raises:
             Exception: If an error occurs during migration creation.
+
         """
         if self.dry_run:
             log.info(

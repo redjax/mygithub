@@ -1,19 +1,18 @@
 from __future__ import annotations
 
-import typing as t
-from pathlib import Path
 import json
+from pathlib import Path
+import typing as t
+
+from mygh.domain.github import stars as stars_domain
+from mygh.libs import settings, setup
+from mygh.libs.depends import db_depends
 
 from cyclopts import App, Group, Parameter
-from mygh.libs.depends import db_depends
 from loguru import logger as log
-from mygh.libs import settings
-from mygh.libs import setup
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.sql as sa_sql
-
-from mygh.domain.github import stars as stars_domain
 
 db_app = App(name="db", help="CLI for managing the database.")
 
