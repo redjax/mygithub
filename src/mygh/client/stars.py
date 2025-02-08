@@ -8,7 +8,22 @@ from loguru import logger as log
 
 from mygh.libs.depends import db_depends
 from mygh.domain.github import stars as stars_domain
+from mygh.controllers import GithubAPIController
+from mygh.libs import settings
 
+
+def get_starred_repos(api_token: str = settings.GITHUB_SETTINGS.get("GH_API_TOKEN", default=None), use_cache: bool = False, cache_ttl: int = 900):
+    gh_api_controller: GithubAPIController = GithubAPIController(api_token=api_token, use_cache=use_cache, cache_ttl=cache_ttl)
+
+    try:
+        with gh_api_controller as gh:
+            starred_repos = gh.get_user_stars()
+        return starred_repos
+    except Exception as exc:
+        msg = f"({type(exc)}) Unhandled exception getting user's starred repositories. Details: {exc}"
+        log.error(msg)
+        raise    
+    
 
 def save_github_stars(starred_repos: list[dict]) -> list[stars_domain.GithubStarredRepositoryModel]:
     session_pool = db_depends.get_session_pool()
@@ -109,6 +124,7 @@ def save_github_stars(starred_repos: list[dict]) -> list[stars_domain.GithubStar
             updated_at=repo_data["updated_at"],
             pushed_at=repo_data["pushed_at"],
             git_url=repo_data["git_url"],
+            has_issues=repo_data["has_issues"],
             ssh_url=repo_data["ssh_url"],
             clone_url=repo_data["clone_url"],
             svn_url=repo_data["svn_url"],
