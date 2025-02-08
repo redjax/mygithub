@@ -2,6 +2,15 @@
 
 A Python app to interact with the Github API using a [Personal Access Token (PAT)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token).
 
+## Table of Contents <!-- omit in toc -->
+
+- [Requirements](#requirements)
+- [Setup](#setup)
+- [Usage](#usage)
+  - [Import into another script](#import-into-another-script)
+  - [Use the CLI](#use-the-cli)
+- [Links](#links)
+
 ## Requirements
 
 - [Astral `uv`](https://docs.astral.sh/uv)
