@@ -100,21 +100,21 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     stargazers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     watchers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     language: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True)
-    has_issues: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    has_projects: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    has_downloads: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    has_wiki: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    has_pages: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    has_discussions: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
+    has_issues: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    has_projects: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    has_downloads: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    has_wiki: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    has_pages: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    has_discussions: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
     forks_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     mirror_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
-    archived: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    disabled: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
+    archived: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    disabled: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
     open_issues_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     license: so.Mapped[dict] = so.mapped_column(JSON, nullable=True)
-    allow_forking: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    is_template: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
-    web_commit_signoff_required: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False),
+    allow_forking: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    is_template: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
+    web_commit_signoff_required: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=False, default=False)
     ## Storing a list of strings as JSON for cross-database support
     topics: so.Mapped[list[str]] = so.mapped_column(
         ## Store as TEXT in SQLite, JSON elsewhere
