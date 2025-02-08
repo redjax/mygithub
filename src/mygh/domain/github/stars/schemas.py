@@ -61,7 +61,7 @@ class GithubStarredRepoBase(BaseModel):
     private: bool
     owner: GithubRepositoryOwnerBase
     html_url: str
-    description: str
+    description: str | None = Field(default=None)
     fork: bool
     url: str
     forks_url: str
@@ -107,11 +107,11 @@ class GithubStarredRepoBase(BaseModel):
     ssh_url: str
     clone_url: str
     svn_url: str
-    homepage: str
+    homepage: str | None = Field(default=None)
     size: int
     stargazers_count: int
     watchers_count: int
-    language: str
+    language: str | None = Field(default=None)
     has_issues: bool
     has_projects: bool
     has_downloads: bool
@@ -119,11 +119,11 @@ class GithubStarredRepoBase(BaseModel):
     has_pages: bool
     has_discussions: bool
     forks_count: int
-    mirror_url: str
+    mirror_url: str | None = Field(default=None)
     archived: bool
     disabled: bool
     open_issues_count: int
-    license: str
+    license: dict | None = Field(default_factory={})
     allow_forking: bool
     is_template: bool
     web_commit_signoff_required: bool
