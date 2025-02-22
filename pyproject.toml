@@ -11,6 +11,7 @@ dependencies = [
     "coreutils-lib",
     "cyclopts>=3.6.0",
     "database-lib",
+    "datalab",
     "depends-lib",
     "domain",
     "dynaconf>=3.2.7",
@@ -52,6 +53,8 @@ domain = { workspace = true }
 controllers = { workspace = true }
 github-client = { workspace = true }
 cli = { workspace = true }
+datalab = { workspace = true }
+dataframe-lib = { workspace = true }
 
 [dependency-groups]
 dev = [
