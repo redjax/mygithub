@@ -6,14 +6,25 @@ readme = "README.md"
 authors = [{ name = "redjax", email = "none@none.com" }]
 requires-python = ">=3.12"
 dependencies = [
+    "cli",
+    "controllers",
+    "coreutils-lib",
     "cyclopts>=3.6.0",
+    "database-lib",
+    "depends-lib",
+    "domain",
     "dynaconf>=3.2.7",
+    "github-client",
     "hishel>=0.1.1",
+    "http-lib",
     "httpx>=0.28.1",
     "loguru>=0.7.3",
     "pandas>=2.2.3",
+    "psycopg2-binary>=2.9.10",
     "pyarrow>=19.0.0",
     "pydantic>=2.10.6",
+    "settings-lib",
+    "setup-lib",
     "sqlalchemy>=2.0.38",
 ]
 
@@ -26,6 +37,21 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mygh"]
+
+[tool.uv.workspace]
+members = ["libs/*", "packages/*", "applications/*"]
+
+[tool.uv.sources]
+coreutils-lib = { workspace = true }
+database-lib = { workspace = true }
+depends-lib = { workspace = true }
+http-lib = { workspace = true }
+settings-lib = { workspace = true }
+setup-lib = { workspace = true }
+domain = { workspace = true }
+controllers = { workspace = true }
+github-client = { workspace = true }
+cli = { workspace = true }
 
 [dependency-groups]
 dev = [

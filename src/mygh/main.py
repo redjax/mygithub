@@ -4,11 +4,11 @@ import json
 from pathlib import Path
 import typing as t
 
-import mygh.client
-from mygh.controllers import GithubAPIController
-from mygh.domain.github import stars as stars_domain
-from mygh.libs import db_lib, settings, setup
-from mygh.libs.depends import db_depends
+import gh_client
+from controllers import GithubAPIController
+from domain.github import stars as stars_domain
+import db_lib, settings, setup
+from depends import db_depends
 
 from loguru import logger as log
 
@@ -27,7 +27,7 @@ def main(api_token: str, save_json: bool = False, json_file: t.Union[str, Path] 
         f.write(_data)
 
     try:
-        saved_stars = mygh.client.save_github_stars(starred_repos=starred_repos)
+        saved_stars = gh_client.save_github_stars(starred_repos=starred_repos)
         log.debug(f"Saved [{len(saved_stars)}] github stars to database")
     except Exception as exc:
         msg = f"({type(exc)}) Error saving github stars to database. Details: {exc}"
