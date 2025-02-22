@@ -3,7 +3,7 @@ import settings, setup, db_lib
 from depends import db_depends
 
 from domain import github as github_domain
-from datalab import df_ops
+import df_lib
 
 import sqlalchemy as sa
 
@@ -15,7 +15,7 @@ def main(db_engine: sa.Engine):
 
     log.info("Building dataframe from database table: 'gh_starred_repo'")
     try:
-        starred_df: pd.DataFrame = df_ops.load.load_df_from_sql(
+        starred_df: pd.DataFrame = df_lib.load.load_df_from_sql(
             table_name="gh_starred_repo", db_engine=db_engine
         )
     except Exception as exc:
@@ -32,11 +32,8 @@ def main(db_engine: sa.Engine):
 
     log.info(f"Saving dataframe to .data/output/pq/gh_starred_repo.parquet")
     try:
-        df_ops.save.save_df_to_pq(
+        df_lib.save.save_df_to_pq(
             df=starred_df, output_file=".data/output/pq/gh_starred_repo.parquet"
-        )
-        log.info(
-            "Saved starred repos to parquet file: ./data/output/pq/gh_starred_repo.parquet"
         )
     except Exception as exc:
         msg = f"({type(exc)}) Error saving github starred repositories: {exc}"

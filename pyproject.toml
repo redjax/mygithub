@@ -11,6 +11,7 @@ dependencies = [
     "coreutils-lib",
     "cyclopts>=3.6.0",
     "database-lib",
+    "dataframe-lib",
     "datalab",
     "depends-lib",
     "domain",
@@ -54,6 +55,7 @@ controllers = { workspace = true }
 github-client = { workspace = true }
 cli = { workspace = true }
 datalab = { workspace = true }
+dataframe-lib = { workspace = true }
 
 [dependency-groups]
 dev = [
