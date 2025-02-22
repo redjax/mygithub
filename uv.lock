@@ -7,7 +7,6 @@ members = [
     "controllers",
     "coreutils-lib",
     "database-lib",
-    "dataframe-lib",
     "datalab",
     "depends-lib",
     "domain",
@@ -124,11 +123,19 @@ name = "coreutils-lib"
 version = "0.1.0"
 source = { editable = "libs/coreutils-lib" }
 dependencies = [
+    { name = "fastparquet" },
     { name = "loguru" },
+    { name = "pandas" },
+    { name = "pyarrow" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "loguru", specifier = ">=0.7.3" }]
+requires-dist = [
+    { name = "fastparquet", specifier = ">=2024.11.0" },
+    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "pandas", specifier = ">=2.2.3" },
+    { name = "pyarrow", specifier = ">=19.0.1" },
+]
 
 [[package]]
 name = "cramjam"
@@ -201,11 +208,6 @@ requires-dist = [
     { name = "settings-lib", editable = "libs/settings-lib" },
     { name = "sqlalchemy", specifier = ">=2.0.37" },
 ]
-
-[[package]]
-name = "dataframe-lib"
-version = "0.1.0"
-source = { editable = "libs/dataframe-lib" }
 
 [[package]]
 name = "datalab"
@@ -570,7 +572,6 @@ dependencies = [
     { name = "coreutils-lib" },
     { name = "cyclopts" },
     { name = "database-lib" },
-    { name = "dataframe-lib" },
     { name = "datalab" },
     { name = "depends-lib" },
     { name = "domain" },
@@ -604,7 +605,6 @@ requires-dist = [
     { name = "coreutils-lib", editable = "libs/coreutils-lib" },
     { name = "cyclopts", specifier = ">=3.6.0" },
     { name = "database-lib", editable = "libs/database-lib" },
-    { name = "dataframe-lib", editable = "libs/dataframe-lib" },
     { name = "datalab", editable = "packages/datalab" },
     { name = "depends-lib", editable = "libs/depends-lib" },
     { name = "domain", editable = "packages/domain" },

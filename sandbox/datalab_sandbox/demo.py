@@ -3,7 +3,8 @@ import settings, setup, db_lib
 from depends import db_depends
 
 from domain import github as github_domain
-import df_lib
+
+from core_utils import df_utils
 
 import sqlalchemy as sa
 
@@ -15,7 +16,7 @@ def main(db_engine: sa.Engine):
 
     log.info("Building dataframe from database table: 'gh_starred_repo'")
     try:
-        starred_df: pd.DataFrame = df_lib.load.load_df_from_sql(
+        starred_df: pd.DataFrame = df_utils.io.load_sql(
             table_name="gh_starred_repo", db_engine=db_engine
         )
     except Exception as exc:
@@ -32,8 +33,8 @@ def main(db_engine: sa.Engine):
 
     log.info(f"Saving dataframe to .data/output/pq/gh_starred_repo.parquet")
     try:
-        df_lib.save.save_df_to_pq(
-            df=starred_df, output_file=".data/output/pq/gh_starred_repo.parquet"
+        df_utils.io.save_pq(
+            df=starred_df, pq_file=".data/output/pq/gh_starred_repo.parquet"
         )
     except Exception as exc:
         msg = f"({type(exc)}) Error saving github starred repositories: {exc}"
@@ -43,8 +44,8 @@ def main(db_engine: sa.Engine):
 
     log.info("Attempting to load saved Parquet data")
     try:
-        saved_starred_df = df_lib.load.load_df_from_pq(
-            parquet_file=".data/output/pq/gh_starred_repo.parquet"
+        saved_starred_df = df_utils.io.load_pq(
+            pq_file=".data/output/pq/gh_starred_repo.parquet"
         )
     except Exception as exc:
         msg = f"({type(exc)}) Error loading saved Parquet data: {exc}"
