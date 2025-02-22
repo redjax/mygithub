@@ -3,16 +3,18 @@ from __future__ import annotations
 from logging.config import fileConfig
 
 from alembic import context
-from mygh.domain.github.stars import GithubStarsAPIResponseModel
-from mygh.libs import db_lib, settings
-from mygh.libs.depends import db_depends
+from domain.github.stars import GithubStarsAPIResponseModel
+from libs import db_lib, settings
+from depends import db_depends
 
 from sqlalchemy import engine_from_config, pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", db_depends.get_db_uri().render_as_string(hide_password=False))
+config.set_main_option(
+    "sqlalchemy.url", db_depends.get_db_uri().render_as_string(hide_password=False)
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -69,9 +71,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
