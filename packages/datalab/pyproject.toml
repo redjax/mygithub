@@ -1,0 +1,21 @@
+[project]
+name = "datalab"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "redjax", email = "no@none.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastparquet>=2024.11.0",
+    "pandas>=2.2.3",
+    "pyarrow>=19.0.0",
+]
+
+[project.scripts]
+datalab = "datalab:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

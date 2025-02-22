@@ -9,6 +9,7 @@
         "./libs/setup-lib/src",
         "./packages/domain/src",
         "./packages/controllers/src",
-        "./packages/github-client/src"
+        "./packages/github-client/src",
+        "./packages/datalab/src"
     ]
 }
