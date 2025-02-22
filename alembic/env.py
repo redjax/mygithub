@@ -4,7 +4,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from domain.github.stars import GithubStarsAPIResponseModel
-from libs import db_lib, settings
+import db_lib, settings
 from depends import db_depends
 
 from sqlalchemy import engine_from_config, pool
