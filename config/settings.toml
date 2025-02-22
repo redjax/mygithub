@@ -1,7 +1,21 @@
 [default]
 log_level = "INFO"
 
+db_drivername = "sqlite+pysqlite"
+db_username = ""
+db_password = ""
+db_host = ""
+db_port = ""
+db_database = "mygithub.sqlite"
+
 [dev]
 log_level = "DEBUG"
+
+db_drivername = "sqlite+pysqlite"
+db_username = ""
+db_password = ""
+db_host = ""
+db_port = ""
+db_database = "dev.mygithub.sqlite"
 
 [prod]

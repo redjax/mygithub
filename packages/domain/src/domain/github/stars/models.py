@@ -152,7 +152,7 @@ class GithubRepositoryOwnerModel(db_lib.base.Base):
     events_url: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
     received_events_url: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
     type: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
-    user_view_type: so.Mapped[str] = so.mapped_column(sa.String, nullable=False)
+    user_view_type: so.Mapped[str] = so.mapped_column(sa.String, nullable=True, default=None)
     site_admin: so.Mapped[bool] = so.mapped_column(sa.Boolean, nullable=True, default=False)
 
     # Relationship: One owner has many repositories

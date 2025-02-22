@@ -18,7 +18,6 @@ db_app = App(name="db", help="CLI for managing the database.")
 
 SEED_DATA_DIR: str = ".data/seed_data"
 
-
 @db_app.command(name="init")
 def _init_db():
     """Initialize the database."""
