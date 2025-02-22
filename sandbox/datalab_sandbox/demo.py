@@ -41,6 +41,23 @@ def main(db_engine: sa.Engine):
 
         raise
 
+    log.info("Attempting to load saved Parquet data")
+    try:
+        saved_starred_df = df_lib.load.load_df_from_pq(
+            parquet_file=".data/output/pq/gh_starred_repo.parquet"
+        )
+    except Exception as exc:
+        msg = f"({type(exc)}) Error loading saved Parquet data: {exc}"
+        log.error(msg)
+
+        raise
+
+    if not isinstance(saved_starred_df, pd.DataFrame) or saved_starred_df.empty:
+        log.error("Saved DataFrame is empty.")
+        return
+
+    log.info(f"First 10 results from saved Parquet data:\n{saved_starred_df.head(10)}")
+
 
 if __name__ == "__main__":
     setup.setup_loguru_logging(

@@ -1,12 +1,15 @@
 from loguru import logger as log
 
+import typing as t
+from pathlib import Path
+
 import settings, db_lib
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 import sqlalchemy.exc as sa_exc
 import pandas as pd
 
-__all__ = ["load_df_from_sql"]
+__all__ = ["load_df_from_sql", "load_df_from_pq"]
 
 
 def load_df_from_sql(table_name: str, db_engine: sa.Engine):
@@ -21,6 +24,26 @@ def load_df_from_sql(table_name: str, db_engine: sa.Engine):
     log.info(f"Reading table into DataFrame: {table_name}")
     try:
         df: pd.DataFrame = pd.read_sql_table(table_name=table_name, con=db_engine)
+
+        return df
+    except Exception as exc:
+        msg = f"({type(exc)}) error"
+        log.error(msg)
+
+        raise exc
+
+
+def load_df_from_pq(parquet_file: t.Union[str, Path], engine: str = "pyarrow"):
+    if not parquet_file:
+        log.error("Missing a Parquet file path")
+        return
+
+    if not Path(str(parquet_file)).exists():
+        raise FileNotFoundError(f"Could not find Parquet file: {parquet_file}")
+
+    log.info(f"Reading Parquet file into DataFrame: {parquet_file}")
+    try:
+        df: pd.DataFrame = pd.read_parquet(parquet_file, engine=engine)
 
         return df
     except Exception as exc:
