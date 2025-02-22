@@ -1,6 +1,7 @@
 [default]
 log_level = "INFO"
 
+db_type = "sqlite"
 db_drivername = "sqlite+pysqlite"
 db_username = ""
 db_password = ""
@@ -8,9 +9,17 @@ db_host = ""
 db_port = ""
 db_database = "mygithub.sqlite"
 
+# db_type = "postgres"
+# db_drivername = "postgresql+psycopg2"
+# db_username = "postgres"
+# db_host = "server-ip-or-hostname"
+# db_port = "5432"
+# db_database = "database-name"
+
 [dev]
 log_level = "DEBUG"
 
+db_type = "sqlite"
 db_drivername = "sqlite+pysqlite"
 db_username = ""
 db_password = ""
