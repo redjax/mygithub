@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
+        "./applications/api/src",
         "./applications/cli/src",
         "./libs/coreutils-lib/src",
         "./libs/database-lib/src",

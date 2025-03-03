@@ -5,12 +5,13 @@ Revises: e8167c89b646
 Create Date: 2025-02-22 12:08:43.450111
 
 """
+from __future__ import annotations
 
 from typing import Sequence, Union
 
 from alembic import op
-import sqlalchemy as sa
 
+import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = "cf5833d1b98d"

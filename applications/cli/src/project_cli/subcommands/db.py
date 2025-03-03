@@ -4,12 +4,12 @@ import json
 from pathlib import Path
 import typing as t
 
-from domain.github import stars as stars_domain
-import settings, setup
-from depends import db_depends
-
 from cyclopts import App, Group, Parameter
+from depends import db_depends
+from domain.github import stars as stars_domain
 from loguru import logger as log
+import settings
+import setup
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.sql as sa_sql
@@ -17,6 +17,7 @@ import sqlalchemy.sql as sa_sql
 db_app = App(name="db", help="CLI for managing the database.")
 
 SEED_DATA_DIR: str = ".data/seed_data"
+
 
 @db_app.command(name="init")
 def _init_db():
@@ -37,7 +38,7 @@ def _init_db():
 def show_db_info(
     option: t.Annotated[
         str, Parameter(name="option", show_default=True, help="Options: ['tables']")
-    ]
+    ],
 ):
     """Show information about the database.
 

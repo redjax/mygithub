@@ -7,6 +7,7 @@ import typing as t
 import hishel
 import httpx
 
+
 def get_sqlite_cache_storage(
     cache_db_path: str = ".cache/http/hishel.sqlite3", ttl=900
 ) -> hishel.SQLiteStorage:

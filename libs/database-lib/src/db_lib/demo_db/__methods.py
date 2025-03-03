@@ -9,6 +9,7 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 
+
 def return_demo_db_config(
     drivername: str = "sqlite+pysqlite",
     username: str | None = None,
@@ -25,7 +26,7 @@ def return_demo_db_config(
         "port": port,
         "database": database or ".db/demo.sqlite3",
     }
-    
+
     return db_config
 
 

@@ -4,17 +4,25 @@ import json
 from pathlib import Path
 import typing as t
 
-import gh_client
 from controllers import GithubAPIController
-from domain.github import stars as stars_domain
-import db_lib, settings, setup
+import db_lib
 from depends import db_depends
-
+from domain.github import stars as stars_domain
+import gh_client
 from loguru import logger as log
+import settings
+import setup
 
-def main(api_token: str, save_json: bool = False, json_file: t.Union[str, Path] = "starred.json"):
+
+def main(
+    api_token: str,
+    save_json: bool = False,
+    json_file: t.Union[str, Path] = "starred.json",
+):
     log.debug("Setting up Github API controller")
-    gh_api_controller: GithubAPIController = GithubAPIController(api_token=api_token, cache_ttl=10800)
+    gh_api_controller: GithubAPIController = GithubAPIController(
+        api_token=api_token, cache_ttl=10800
+    )
 
     with gh_api_controller as gh:
         starred_repos = gh.get_user_stars()
@@ -32,7 +40,7 @@ def main(api_token: str, save_json: bool = False, json_file: t.Union[str, Path] 
     except Exception as exc:
         msg = f"({type(exc)}) Error saving github stars to database. Details: {exc}"
         log.error(msg)
-        
+
         raise
 
 

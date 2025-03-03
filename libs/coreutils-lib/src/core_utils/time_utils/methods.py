@@ -13,7 +13,10 @@ from .constants import TIME_FMT_12H, TIME_FMT_24H
 
 from loguru import logger as log
 
-def datetime_as_str(ts: dt = None, format: str = TIME_FMT_24H, safe_str: bool = False) -> str:
+
+def datetime_as_str(
+    ts: dt = None, format: str = TIME_FMT_24H, safe_str: bool = False
+) -> str:
     """Convert a `datetime.datetime` object to a string.
 
     Params:
@@ -29,12 +32,12 @@ def datetime_as_str(ts: dt = None, format: str = TIME_FMT_24H, safe_str: bool = 
         ":": "-",
         "\\": "/",
         "*": "(all)",
-        "\"": "'",
+        '"': "'",
         "|": "_",
-        "?": "-_-"
+        "?": "-_-",
     }
     _ts: str = ts.strftime(format=format)
-    
+
     if safe_str:
         for char in path_char_replacements.keys():
             if char in _ts:
@@ -59,7 +62,9 @@ def datetime_as_dt(ts: str = None, format: str = TIME_FMT_24H) -> dt:
     return _ts
 
 
-def get_ts(as_str: bool = False, safe_str: bool = False, format: str = TIME_FMT_24H) -> Union[dt, str]:
+def get_ts(
+    as_str: bool = False, safe_str: bool = False, format: str = TIME_FMT_24H
+) -> Union[dt, str]:
     """Get a timestamp object.
 
     Params:

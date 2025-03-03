@@ -3,10 +3,11 @@ from __future__ import annotations
 from logging.config import fileConfig
 
 from alembic import context
-from domain.github.stars import GithubStarsAPIResponseModel
-import db_lib, settings
-from depends import db_depends
 
+import db_lib
+from depends import db_depends
+from domain.github.stars import GithubStarsAPIResponseModel
+import settings
 from sqlalchemy import engine_from_config, pool
 
 # this is the Alembic Config object, which provides

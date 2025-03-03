@@ -6,6 +6,7 @@ readme = "README.md"
 authors = [{ name = "redjax", email = "none@none.com" }]
 requires-python = ">=3.12"
 dependencies = [
+    "api",
     "cli",
     "controllers",
     "coreutils-lib",
@@ -56,6 +57,7 @@ github-client = { workspace = true }
 cli = { workspace = true }
 datalab = { workspace = true }
 dataframe-lib = { workspace = true }
+api = { workspace = true }
 
 [dependency-groups]
 dev = [

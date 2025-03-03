@@ -77,7 +77,7 @@ def trim_uuid(trim: int = 0, in_uuid: str = uuid.uuid4(), as_hex: bool = False) 
     ## Validate trim/characters
     if trim < 0 or trim > _max:
         raise ValueError(
-            f"Invalid trim length: {trim}. Must be greater than 0 and less than {_max} ({_max -1})."
+            f"Invalid trim length: {trim}. Must be greater than 0 and less than {_max} ({_max - 1})."
         )
 
     ## Trim n characters from end of string

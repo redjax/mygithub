@@ -6,9 +6,10 @@ import typing as t
 from loguru import logger as log
 from pydantic import BaseModel, Field, ValidationError, computed_field, field_validator
 
+
 class GithubStarsAPIResponseBase(BaseModel):
     json_data: t.List[t.Dict[str, t.Any]] = Field(default_factory=[], repr=False)
-    
+
     @computed_field
     @property
     def stars_count(self) -> int:
@@ -16,9 +17,11 @@ class GithubStarsAPIResponseBase(BaseModel):
             return len(self.json_data)
         else:
             return 0
-    
+
+
 class GithubStarsAPIResponseIn(GithubStarsAPIResponseBase):
     pass
+
 
 class GithubStarsAPIResponseOut(GithubStarsAPIResponseBase):
     id: int
@@ -48,18 +51,21 @@ class GithubRepositoryOwnerBase(BaseModel):
     user_view_type: str
     site_admin: bool
 
+
 class GithubRepositoryOwnerIn(GithubRepositoryOwnerBase):
     pass
 
+
 class GithubRepositoryOwnerOut(GithubRepositoryOwnerBase):
     repo_owner_id: int
+
 
 class GithubStarredRepoBase(BaseModel):
     id: int
     node_id: str
     name: str
     private: bool
-    owner: GithubRepositoryOwnerBase
+    owner: GithubRepositoryOwnerBase | None =  Field(default=None)
     html_url: str
     description: str | None = Field(default=None)
     fork: bool
@@ -127,7 +133,7 @@ class GithubStarredRepoBase(BaseModel):
     allow_forking: bool
     is_template: bool
     web_commit_signoff_required: bool
-    topics: t.List[str]
+    topics: t.List[str] | str | None = Field(default_factory=[])
     visibility: str
     forks: int
     open_issues: int
@@ -135,11 +141,13 @@ class GithubStarredRepoBase(BaseModel):
     default_branch: str
     permissions: dict
 
+
 class GithubStarredRepoIn(GithubStarredRepoBase):
     pass
 
+
 class GithubStarredRepoOut(GithubStarredRepoBase):
     repo_id: int
-    
+
     created_at: datetime
     updated_at: datetime

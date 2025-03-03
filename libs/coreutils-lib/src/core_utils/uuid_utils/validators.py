@@ -45,14 +45,10 @@ def validate_trim(trim_in: int = 0, as_hex: bool = False) -> int:
 
     ## Check that trim_in does not exceed length of UUID string
     if trim_in >= uuid_len:
-        exc_msg: str = (
-            f"Trim value must be less than {uuid_len}. At least 1 character must be returned."
-        )
+        exc_msg: str = f"Trim value must be less than {uuid_len}. At least 1 character must be returned."
 
         if as_hex:
-            exc_msg: str = (
-                f"{exc_msg} Note that a hexadecimal UUID string is only 32 characters because of the missing '-' characters."
-            )
+            exc_msg: str = f"{exc_msg} Note that a hexadecimal UUID string is only 32 characters because of the missing '-' characters."
 
         raise ValueError(exc_msg)
 
@@ -99,14 +95,10 @@ def validate_characters(characters_in: int = 0, as_hex: bool = False) -> int:
         raise ValueError(f"Trim value must be 0 or greater.")
 
     if characters_in >= uuid_len:
-        exc_msg: str = (
-            f"Trim value must be less than {uuid_len}. At least 1 character must be returned."
-        )
+        exc_msg: str = f"Trim value must be less than {uuid_len}. At least 1 character must be returned."
 
         if as_hex:
-            exc_msg: str = (
-                f"{exc_msg} Note that a hexadecimal UUID string is only {glob_uuid_lens.hex} characters because of the missing '-' characters."
-            )
+            exc_msg: str = f"{exc_msg} Note that a hexadecimal UUID string is only {glob_uuid_lens.hex} characters because of the missing '-' characters."
 
         raise ValueError(exc_msg)
 
