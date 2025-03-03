@@ -1,15 +1,14 @@
-from loguru import logger as log
-import settings, setup, db_lib
-from depends import db_depends
-
-from domain import github as github_domain
+from __future__ import annotations
 
 from core_utils import df_utils
-
-import sqlalchemy as sa
-
+import db_lib
+from depends import db_depends
+from domain import github as github_domain
+from loguru import logger as log
 import pandas as pd
-
+import settings
+import setup
+import sqlalchemy as sa
 
 def main(db_engine: sa.Engine):
     log.debug(f"DB engine dialect: {db_engine.dialect.name}")

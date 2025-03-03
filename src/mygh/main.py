@@ -4,13 +4,14 @@ import json
 from pathlib import Path
 import typing as t
 
-import gh_client
 from controllers import GithubAPIController
-from domain.github import stars as stars_domain
-import db_lib, settings, setup
+import db_lib
 from depends import db_depends
-
+from domain.github import stars as stars_domain
+import gh_client
 from loguru import logger as log
+import settings
+import setup
 
 def main(api_token: str, save_json: bool = False, json_file: t.Union[str, Path] = "starred.json"):
     log.debug("Setting up Github API controller")

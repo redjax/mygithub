@@ -2,9 +2,6 @@ from __future__ import annotations
 
 import json
 
-import db_lib, settings
-from depends import db_depends
-
 from .models import (
     GithubRepositoryOwnerModel,
     GithubStarredRepositoryModel,
@@ -19,7 +16,10 @@ from .schemas import (
     GithubStarsAPIResponseOut,
 )
 
+import db_lib
+from depends import db_depends
 from loguru import logger as log
+import settings
 
 def convert_github_stars_api_response_schema_to_db_model(api_response: GithubStarsAPIResponseIn) -> GithubStarsAPIResponseModel:
     api_response_model: GithubStarsAPIResponseModel = GithubStarsAPIResponseModel(json_data=api_response.json_data)

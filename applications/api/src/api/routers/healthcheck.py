@@ -1,7 +1,10 @@
+from __future__ import annotations
+
+import logging
+
 from fastapi import APIRouter, HTTPException, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-import logging
 from loguru import logger as log
 
 __all__ = ["router"]

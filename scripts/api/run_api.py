@@ -1,7 +1,11 @@
 from __future__ import annotations
 
-from api import UvicornCustomServer, UvicornSettings, initialize_custom_server
-from api import start_api
+from api import (
+    UvicornCustomServer,
+    UvicornSettings,
+    initialize_custom_server,
+    start_api,
+)
 from loguru import logger as log
 import settings
 import setup

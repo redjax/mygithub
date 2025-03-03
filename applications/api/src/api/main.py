@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import typing as t
 
-from fastapi import FastAPI, APIRouter
-
 from api import utils as api_utils
+
 from .routers import api_router
+
+from fastapi import APIRouter, FastAPI
 from settings.api_settings import FASTAPI_SETTINGS
 
 fastapi_app: FastAPI = api_utils.get_app(debug=..., )

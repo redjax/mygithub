@@ -4,9 +4,9 @@ import sys
 import typing as t
 
 from .subcommands._alembic import alembic_app
+from .subcommands.api import api_app
 from .subcommands.db import db_app
 from .subcommands.github import gh_app
-from .subcommands.api import api_app
 
 from cyclopts import App, Group, Parameter
 from loguru import logger as log

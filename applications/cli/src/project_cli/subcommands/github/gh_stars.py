@@ -3,13 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 import typing as t
 
-import gh_client
 from packages.controllers.src.controllers import GithubAPIController
-from domain.github import stars as stars_domain
-import settings
 
 from cyclopts import App, Group, Parameter
+from domain.github import stars as stars_domain
+import gh_client
 from loguru import logger as log
+import settings
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so

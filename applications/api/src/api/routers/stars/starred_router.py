@@ -1,12 +1,14 @@
-from loguru import logger as log
+from __future__ import annotations
 
 import typing as t
 
 from api import helpers as api_helpers
 from api.responses import API_RESPONSE_DICT
+
 from fastapi import APIRouter, Depends, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
+from loguru import logger as log
 
 __all__ = ["router"]
 

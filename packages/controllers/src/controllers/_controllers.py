@@ -5,9 +5,12 @@ import json
 from pathlib import Path
 import typing as t
 
-import core_utils, db_lib, depends, http_lib, settings
-
+import core_utils
+import db_lib
+import depends
+import http_lib
 from loguru import logger as log
+import settings
 
 class GithubAPIController(AbstractContextManager):
     def __init__(

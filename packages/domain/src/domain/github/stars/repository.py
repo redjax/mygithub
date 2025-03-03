@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import typing as t
 
-import db_lib
-
 from .models import (
     GithubRepositoryOwnerModel,
     GithubStarredRepositoryModel,
     GithubStarsAPIResponseModel,
 )
 
+import db_lib
 from loguru import logger as log
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc

@@ -1,9 +1,15 @@
+from __future__ import annotations
+
 import typing as t
 
+from api import (
+    UvicornCustomServer,
+    UvicornSettings,
+    initialize_custom_server,
+    start_api,
+)
 from cyclopts import App, Group, Parameter
 from loguru import logger as log
-from api import UvicornCustomServer, UvicornSettings, initialize_custom_server
-from api import start_api
 import settings
 
 api_app =  App("api", help="API operations")
