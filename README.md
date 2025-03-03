@@ -6,6 +6,10 @@ A Python app to interact with the Github API using a [Personal Access Token (PAT
 
 - [Requirements](#requirements)
 - [Setup](#setup)
+- [Supported databases](#supported-databases)
+  - [SQLite (default)](#sqlite-default)
+  - [PostgreSQL](#postgresql)
+  - [MySQL/MariaDB](#mysqlmariadb)
 - [Usage](#usage)
   - [Import into another script](#import-into-another-script)
   - [Use the CLI](#use-the-cli)
@@ -24,6 +28,65 @@ A Python app to interact with the Github API using a [Personal Access Token (PAT
   - Configurations with `.local` are ignored by git because they may contain secrets or deployment-specific configurations
   - Note: There is a [`nox` session](./noxfile.py) you can use to do this: `nox -s init-clone-setup`.
   - Make sure to edit the values, i.e. in the [`.secrets.local.toml` file](./config/.secrets.toml)
+
+## Supported databases
+
+### SQLite (default)
+
+...
+
+### PostgreSQL
+
+...
+
+### MySQL/MariaDB
+
+If you are connecting to a remote MySQL database, you will need to mount a custom database configuration file to allow remote connections. Create a file `custom.cnf` with the following contents:
+
+```cnf
+[mysqld]
+bind-address = 0.0.0.0
+```
+
+Then, mount the file in your `compose.yml`'s `volumes:` section at container path `/etc/mysql/conf.d/custom.cnf`. For example:
+
+```yaml
+---
+services:
+  mariadb:
+    image: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-mysql}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-mysql}
+      MYSQL_USER: ${MYSQL_USER:-mysql}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-mysql}
+    volumes:
+      ## Mount the custom configuration that allows remote connections
+      - ${MYSQL_CONFIG_FILE:-./custom.cnf}:/etc/mysql/conf.d/custom.cnf
+    ports:
+      - 3306:3306
+```
+
+You may also need to log in as the root user and set permissions for your `MYSQL_USER` account (default is `mysql`). From the MySQL/MariaDB host machine, open the `mariadb` container's Bash prompt and grant priviliges to the `MYSQL_USER` account.
+
+Below is an example of the commands you would run. Wherever you see `<mysql-user>` below, replace it with the value of `MYSQL_USER` from your Docker Compose file, and wherever you see `<mysql-password>`, use the value of `MYSQL_PASSWORD`:
+
+```shell
+## Open the container's bash prompt
+docker exec -it mariadb_container_name mysql -u <mysql-root-user> -p
+
+## Grant all privileges for remote connections (not recommended in Production)
+GRANT ALL PRIVILEGES ON `<your-database-name>`.* TO 'mysql'@'%' IDENTIFIED BY '<mysql-password>';
+FLUSH PRIVILEGES;
+
+## Grant only SELECT, INSERT, UPDATE, DELETE permissions
+GRANT SELECT, INSERT, UPDATE, DELETE ON `<your-database-name>`.* TO 'mysql'@'%' IDENTIFIED BY '<mysql-password>';
+FLUSH PRIVILEGES;
+
+## Show the privileges granted to your container user
+SHOW GRANTS FOR '<mysql-user>'@'%';
+```
 
 ## Usage
 
