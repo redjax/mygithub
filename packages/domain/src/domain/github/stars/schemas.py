@@ -65,7 +65,7 @@ class GithubStarredRepoBase(BaseModel):
     node_id: str
     name: str
     private: bool
-    owner: GithubRepositoryOwnerBase
+    owner: GithubRepositoryOwnerBase | None =  Field(default=None)
     html_url: str
     description: str | None = Field(default=None)
     fork: bool
@@ -133,7 +133,7 @@ class GithubStarredRepoBase(BaseModel):
     allow_forking: bool
     is_template: bool
     web_commit_signoff_required: bool
-    topics: t.List[str]
+    topics: t.List[str] | str | None = Field(default_factory=[])
     visibility: str
     forks: int
     open_issues: int

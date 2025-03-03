@@ -105,3 +105,6 @@ class GithubStarredRepositoryDBRepository(
         if repo:
             self.session.delete(repo)
             self.session.commit()
+
+    def get_all(self) -> list[GithubStarredRepositoryModel]:
+        return self.session.execute(sa.select(GithubStarredRepositoryModel)).scalars().all()
