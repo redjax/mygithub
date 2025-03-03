@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing as t
+import json
 
 from api import helpers as api_helpers
 from api.responses import API_RESPONSE_DICT
@@ -62,12 +63,16 @@ def return_all_stars() -> JSONResponse:
     
     log.info(f"Retrieved [{len(starred_repo_out_schemas)}] Github starred repositor{'y' if len(starred_repo_out_schemas) == 1 else 'ies'}")
 
+    log.info("Start JSON encoding")
     try:
         res_json = jsonable_encoder(starred_repo_out_schemas)
+        log.info("End JSON encoding")
     except Exception as exc:
+        log.info("End JSON decoding")
         msg = f"({type(exc)}) Error encoding response. Details: {exc}"
         log.error(msg)
         
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"msg": "Internal server error"})
 
+    log.info("Start return response")
     return JSONResponse(status_code=status.HTTP_200_OK, content={"starred_repositories": res_json})
