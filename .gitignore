@@ -199,9 +199,10 @@ cython_debug/
 ## Ignore mkdocs builds
 site/
 
-.data/*/output
-
 ## Ignore direnv environment files
 .direnv/.*
 .direnv/**/.*
 !.direnv/*.*example*
+
+## Ignore data directory
+.data/*

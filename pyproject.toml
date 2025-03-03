@@ -11,6 +11,7 @@ dependencies = [
     "coreutils-lib",
     "cyclopts>=3.6.0",
     "database-lib",
+    "datalab",
     "depends-lib",
     "domain",
     "dynaconf>=3.2.7",
@@ -23,6 +24,7 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "pyarrow>=19.0.0",
     "pydantic>=2.10.6",
+    "pymysql>=1.1.1",
     "settings-lib",
     "setup-lib",
     "sqlalchemy>=2.0.38",
@@ -52,6 +54,8 @@ domain = { workspace = true }
 controllers = { workspace = true }
 github-client = { workspace = true }
 cli = { workspace = true }
+datalab = { workspace = true }
+dataframe-lib = { workspace = true }
 
 [dependency-groups]
 dev = [

@@ -39,4 +39,10 @@ def setup_database(
                 log.error(msg)
                 raise exc
 
-    db.create_base_metadata(base=sqla_base, engine=engine)
+    try:
+        db.create_base_metadata(base=sqla_base, engine=engine)
+    except Exception as exc:
+        msg = f"({type(exc)}) Error creating database metadata. Details: {exc}"
+        log.error(msg)
+        
+        raise
