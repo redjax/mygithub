@@ -10,6 +10,7 @@ import settings
 import setup
 import sqlalchemy as sa
 
+
 def main(db_engine: sa.Engine):
     log.debug(f"DB engine dialect: {db_engine.dialect.name}")
 

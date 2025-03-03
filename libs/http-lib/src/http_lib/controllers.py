@@ -225,7 +225,9 @@ class HttpxController(AbstractContextManager):
         self.use_cache: bool = use_cache
         self.force_cache: bool = force_cache
         self.follow_redirects: bool = follow_redirects
-        self.cache_type: str | None = cache_type.lower() if (cache_type and isinstance(cache_type, str)) else None
+        self.cache_type: str | None = (
+            cache_type.lower() if (cache_type and isinstance(cache_type, str)) else None
+        )
         self.cache_file_dir: str | None = cache_file_dir
         self.cache_db_file: str = cache_db_file
         self.cache_ttl: int | None = cache_ttl
@@ -287,7 +289,7 @@ class HttpxController(AbstractContextManager):
         """Initialize hishel cache storage."""
         if not self.use_cache:
             return None
-        
+
         match self.cache_type:
             case None:
                 return None
@@ -308,7 +310,7 @@ class HttpxController(AbstractContextManager):
                 log.error(f"Unrecognized cache type: {self.cache_type}")
 
                 return None
-            
+
         return _cache
 
     def _get_cache_controller(self) -> hishel.Controller:
@@ -387,7 +389,7 @@ class HttpxController(AbstractContextManager):
         """
         try:
             res: httpx.Response = self.client.send(request, stream=stream, auth=auth)
-            
+
             return res
         except Exception as exc:
             msg = f"({type(exc)}) Error sending request. Details: {exc}"

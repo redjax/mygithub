@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 
 import httpx
 
+
 def build_request(
     method: str = "GET",
     url: str = None,
@@ -141,9 +142,7 @@ def save_json(
             _data: str = json.dumps(data, indent=4)
             data = _data
         except Exception as exc:
-            msg: str = (
-                f"({type(exc)}) Unhandled exception dumping dict to JSON string. Details: {exc}"
-            )
+            msg: str = f"({type(exc)}) Unhandled exception dumping dict to JSON string. Details: {exc}"
             log.error(msg)
 
             raise exc

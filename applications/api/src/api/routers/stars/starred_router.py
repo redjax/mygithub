@@ -18,6 +18,7 @@ tags: list[str] = ["stars"]
 
 router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT, tags=tags)
 
+
 @router.get("/")
 def get_root():
     return {"msg": "hello, world"}

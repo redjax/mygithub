@@ -44,5 +44,5 @@ def setup_database(
     except Exception as exc:
         msg = f"({type(exc)}) Error creating database metadata. Details: {exc}"
         log.error(msg)
-        
+
         raise

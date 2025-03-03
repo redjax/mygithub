@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 def backup_sqlite_db(source: str, target: str) -> None:
     """Backup an SQLite database.
-    
+
     Params:
         source (str): The path to the source database.
         target (str): The path to the target database.
@@ -51,7 +51,7 @@ def backup_sqlite_db(source: str, target: str) -> None:
 
 def dump_sqlite_db_schema(source: str, output_dir: str = "db_schema/sqlite"):
     """Dump the schema of a SQLite database.
-    
+
     Params:
         source (str): The path to the source database.
         output_dir (str): The path to the output directory.

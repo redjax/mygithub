@@ -3,7 +3,13 @@ from __future__ import annotations
 from fastapi import APIRouter
 from loguru import logger as log
 
-__all__ = ["is_str", "is_list_str", "validate_root_path", "validate_router", "validate_openapi_tags"]
+__all__ = [
+    "is_str",
+    "is_list_str",
+    "validate_root_path",
+    "validate_router",
+    "validate_openapi_tags",
+]
 
 
 def is_str(input: str) -> str:

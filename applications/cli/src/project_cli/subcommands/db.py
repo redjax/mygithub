@@ -18,6 +18,7 @@ db_app = App(name="db", help="CLI for managing the database.")
 
 SEED_DATA_DIR: str = ".data/seed_data"
 
+
 @db_app.command(name="init")
 def _init_db():
     """Initialize the database."""
@@ -37,7 +38,7 @@ def _init_db():
 def show_db_info(
     option: t.Annotated[
         str, Parameter(name="option", show_default=True, help="Options: ['tables']")
-    ]
+    ],
 ):
     """Show information about the database.
 

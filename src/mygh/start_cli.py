@@ -4,6 +4,7 @@ from cyclopts import App
 from loguru import logger as log
 from project_cli import app as cli_app
 
+
 def start_cli():
     try:
         cli_app.meta()

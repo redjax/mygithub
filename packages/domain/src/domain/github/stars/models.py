@@ -10,43 +10,49 @@ import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 from sqlalchemy.types import JSON
 
+
 class GithubStarsAPIResponseModel(db_lib.base.Base):
     __tablename__ = "gh_stars_api_response"
-    
+
     id: so.Mapped[db_lib.annotated.INT_PK]
-    
+
     json_data: so.Mapped[list[dict]] = so.mapped_column(JSON, nullable=False)
-    
+
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.TIMESTAMP, server_default=sa.func.now()
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(
         sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now()
     )
-    
+
+
 class GithubStarredRepositoryModel(db_lib.base.Base):
     __tablename__ = "gh_starred_repo"
     __table_args__ = (sa.UniqueConstraint("node_id", "name", "url"),)
-    
+
     id: so.Mapped[db_lib.annotated.INT_PK]
-    
+
     repo_id: so.Mapped[db_lib.annotated.INT_PK]
-    
+
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.TIMESTAMP, server_default=sa.func.now()
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(
         sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now()
     )
-    
+
     owner_id: so.Mapped[int] = so.mapped_column(
-        sa.Integer, sa.ForeignKey("gh_repo_owner.id", ondelete="CASCADE"), nullable=False
+        sa.Integer,
+        sa.ForeignKey("gh_repo_owner.id", ondelete="CASCADE"),
+        nullable=False,
     )
-    
+
     id: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     node_id: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     name: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
-    private: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
+    private: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
     html_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     description: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True)
     fork: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
@@ -96,24 +102,54 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     svn_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     homepage: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
     size: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    stargazers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    watchers_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
+    stargazers_count: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0
+    )
+    watchers_count: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0
+    )
     language: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True)
-    has_issues: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    has_projects: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    has_downloads: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    has_wiki: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    has_pages: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    has_discussions: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    forks_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
+    has_issues: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    has_projects: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    has_downloads: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    has_wiki: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    has_pages: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    has_discussions: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    forks_count: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0
+    )
     mirror_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
-    archived: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    disabled: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    open_issues_count: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
+    archived: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    disabled: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    open_issues_count: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0
+    )
     license: so.Mapped[dict] = so.mapped_column(JSON, nullable=True)
-    allow_forking: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    is_template: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
-    web_commit_signoff_required: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
+    allow_forking: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    is_template: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
+    web_commit_signoff_required: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False
+    )
     ## Storing a list of strings as JSON for cross-database support
     topics: so.Mapped[list[str]] = so.mapped_column(
         ## Store as TEXT in SQLite, JSON elsewhere
@@ -121,23 +157,32 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     )
     visibility: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     forks: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    open_issues: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
+    open_issues: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0
+    )
     watchers: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
     default_branch: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     permissions: so.Mapped[dict] = so.mapped_column(JSON, nullable=False)
-    
+
     ## Relationship: Each repository has one owner
     owner: so.Mapped["GithubRepositoryOwnerModel"] = so.relationship(
         "GithubRepositoryOwnerModel", back_populates="repositories"
     )
-    
+
+
 class GithubRepositoryOwnerModel(db_lib.base.Base):
     __tablename__ = "gh_repo_owner"
 
-    id: so.Mapped[int] = so.mapped_column(sa.Integer, primary_key=True, autoincrement=True)
-    login: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False, unique=True)
+    id: so.Mapped[int] = so.mapped_column(
+        sa.Integer, primary_key=True, autoincrement=True
+    )
+    login: so.Mapped[str] = so.mapped_column(
+        sa.String(255), nullable=False, unique=True
+    )
     node_id: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
-    avatar_url: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=True, default=None)
+    avatar_url: so.Mapped[str] = so.mapped_column(
+        sa.String(255), nullable=True, default=None
+    )
     gravatar_id: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=True)
     url: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
     html_url: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
@@ -149,12 +194,20 @@ class GithubRepositoryOwnerModel(db_lib.base.Base):
     organizations_url: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
     repos_url: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
     events_url: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
-    received_events_url: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
+    received_events_url: so.Mapped[str] = so.mapped_column(
+        sa.String(255), nullable=False
+    )
     type: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=False)
-    user_view_type: so.Mapped[str] = so.mapped_column(sa.String(255), nullable=True, default=None)
-    site_admin: so.Mapped[bool] = so.mapped_column(sa.Boolean, nullable=True, default=False)
+    user_view_type: so.Mapped[str] = so.mapped_column(
+        sa.String(255), nullable=True, default=None
+    )
+    site_admin: so.Mapped[bool] = so.mapped_column(
+        sa.Boolean, nullable=True, default=False
+    )
 
     # Relationship: One owner has many repositories
     repositories: so.Mapped[list["GithubStarredRepositoryModel"]] = so.relationship(
-        "GithubStarredRepositoryModel", back_populates="owner", cascade="all, delete-orphan"
+        "GithubStarredRepositoryModel",
+        back_populates="owner",
+        cascade="all, delete-orphan",
     )

@@ -20,7 +20,8 @@ MOUNT_SUB_CLIS: list = [alembic_app, db_app, gh_app, api_app]
 ## Mount sub-CLIs
 for sub_cli in MOUNT_SUB_CLIS:
     app.command(sub_cli)
-    
+
+
 @app.meta.default
 def cli_launcher(
     *tokens: t.Annotated[str, Parameter(show=False, allow_leading_hyphen=True)],

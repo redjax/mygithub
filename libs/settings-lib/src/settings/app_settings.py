@@ -6,5 +6,5 @@ from loguru import logger as log
 APP_SETTINGS = Dynaconf(
     environments=True,
     envvar_prefix="APP",
-    settings_files=["settings.toml", ".secrets.toml"]
+    settings_files=["settings.toml", ".secrets.toml"],
 )

@@ -9,7 +9,13 @@ import settings
 import setup
 import uvicorn
 
-__all__ = ["UvicornCustomServer", "UvicornSettings", "initialize_custom_server", "run_uvicorn_server"]
+__all__ = [
+    "UvicornCustomServer",
+    "UvicornSettings",
+    "initialize_custom_server",
+    "run_uvicorn_server",
+]
+
 
 class UvicornCustomServer(BaseModel):
     """Customize a Uvicorn server by passing a dict to UvicornCustomServer.parse_obj(dict).
@@ -33,7 +39,7 @@ class UvicornCustomServer(BaseModel):
             reload=self.reload,
             root_path=self.root_path,
         )
-        
+
 
 class UvicornSettings(BaseModel):
     """Store configuration for the Uvicorn server.
@@ -63,7 +69,6 @@ class UvicornSettings(BaseModel):
     log_level: str = Field(
         default=settings.UVICORN_SETTINGS.get("UVICORN_LOG_LEVEL", default=None)
     )
-
 
 
 def initialize_custom_server(
@@ -116,10 +121,8 @@ def initialize_custom_server(
 
 def run_uvicorn_server(uvicorn_server: UvicornCustomServer):
     if not uvicorn_server:
-        raise ValueError(
-            "Missing UvicornCustomServer instance."
-        )
-        
+        raise ValueError("Missing UvicornCustomServer instance.")
+
     log.info(f"Starting Uvicorn server")
     try:
         uvicorn_server.run_server()
@@ -129,10 +132,13 @@ def run_uvicorn_server(uvicorn_server: UvicornCustomServer):
 
         raise exc
 
+
 if __name__ == "__main__":
-    setup.setup_loguru_logging(log_level=settings.LOGGING_SETTINGS.get("LOG_LEVEL", default="INFO"))
+    setup.setup_loguru_logging(
+        log_level=settings.LOGGING_SETTINGS.get("LOG_LEVEL", default="INFO")
+    )
     # setup.setup_database()
-    
+
     uvicorn_settings = UvicornSettings()
     log.debug(f"Uvicorn settings object: {uvicorn_settings}")
 

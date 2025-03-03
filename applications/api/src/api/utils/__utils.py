@@ -16,7 +16,14 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger as log
 
-__all__ = ["fix_api_docs", "add_cors_middleware", "add_routers", "get_app", "update_tags_metadata"]
+__all__ = [
+    "fix_api_docs",
+    "add_cors_middleware",
+    "add_routers",
+    "get_app",
+    "update_tags_metadata",
+]
+
 
 def fix_api_docs(app: FastAPI = None):
     """Fix error loading /docs when a root_path is set.
@@ -41,8 +48,8 @@ def fix_api_docs(app: FastAPI = None):
     @app.get(app.root_path + "/openapi.json", include_in_schema=False)
     def custom_swagger_ui_html():
         return app.openapi()
-    
-    
+
+
 def update_tags_metadata(
     tags_metadata: list = tags_metadata,
     update_metadata: t.Union[list[dict[str, str]], dict[str, str]] = None,

@@ -6,9 +6,10 @@ import typing as t
 from loguru import logger as log
 from pydantic import BaseModel, Field, ValidationError, computed_field, field_validator
 
+
 class GithubStarsAPIResponseBase(BaseModel):
     json_data: t.List[t.Dict[str, t.Any]] = Field(default_factory=[], repr=False)
-    
+
     @computed_field
     @property
     def stars_count(self) -> int:
@@ -16,9 +17,11 @@ class GithubStarsAPIResponseBase(BaseModel):
             return len(self.json_data)
         else:
             return 0
-    
+
+
 class GithubStarsAPIResponseIn(GithubStarsAPIResponseBase):
     pass
+
 
 class GithubStarsAPIResponseOut(GithubStarsAPIResponseBase):
     id: int
@@ -48,11 +51,14 @@ class GithubRepositoryOwnerBase(BaseModel):
     user_view_type: str
     site_admin: bool
 
+
 class GithubRepositoryOwnerIn(GithubRepositoryOwnerBase):
     pass
 
+
 class GithubRepositoryOwnerOut(GithubRepositoryOwnerBase):
     repo_owner_id: int
+
 
 class GithubStarredRepoBase(BaseModel):
     id: int
@@ -135,11 +141,13 @@ class GithubStarredRepoBase(BaseModel):
     default_branch: str
     permissions: dict
 
+
 class GithubStarredRepoIn(GithubStarredRepoBase):
     pass
 
+
 class GithubStarredRepoOut(GithubStarredRepoBase):
     repo_id: int
-    
+
     created_at: datetime
     updated_at: datetime
