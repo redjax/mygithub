@@ -695,6 +695,7 @@ name = "mygithub"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "api" },
     { name = "cli" },
     { name = "controllers" },
     { name = "coreutils-lib" },
@@ -729,6 +730,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "api", editable = "applications/api" },
     { name = "cli", editable = "applications/cli" },
     { name = "controllers", editable = "packages/controllers" },
     { name = "coreutils-lib", editable = "libs/coreutils-lib" },
