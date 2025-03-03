@@ -24,6 +24,7 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "pyarrow>=19.0.0",
     "pydantic>=2.10.6",
+    "pymysql>=1.1.1",
     "settings-lib",
     "setup-lib",
     "sqlalchemy>=2.0.38",
