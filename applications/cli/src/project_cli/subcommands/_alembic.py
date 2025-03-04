@@ -14,6 +14,8 @@ from project_cli._controller import AlembicController
 from cyclopts import App, Group, Parameter
 from loguru import logger as log
 
+__all__ = ["alembic_app", "create_migration", "upgrade_db", "downgrade_db"]
+
 alembic_app: App = App(name="alembic", help="CLI for Alembic operations.")
 
 

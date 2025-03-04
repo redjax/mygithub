@@ -12,8 +12,9 @@ from cyclopts import App, Group, Parameter
 from loguru import logger as log
 import settings
 
-api_app = App("api", help="API operations")
+__all__ = ["run_api_server", "api_app"]
 
+api_app = App("api", help="API operations")
 
 @api_app.command(name="run")
 def run_api_server(

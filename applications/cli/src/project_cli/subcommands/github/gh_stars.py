@@ -4,7 +4,7 @@ from pathlib import Path
 import typing as t
 import json
 
-from packages.controllers.src.controllers import GithubAPIController
+from controllers import GithubAPIController
 
 from cyclopts import App, Group, Parameter
 from domain.github import stars as stars_domain
@@ -15,7 +15,7 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 
-from cli_spinners import CustomSpinner
+__all__ = ["gh_stars_app", "get_user_stars"]
 
 gh_stars_app = App(name="stars", help="Github starred repositories")
 
