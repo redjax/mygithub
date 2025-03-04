@@ -1,0 +1,18 @@
+[project]
+name = "spinner-lib"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [{ name = "redjax", email = "no@none.com" }]
+requires-python = ">=3.12"
+dependencies = ["halo>=0.0.31"]
+
+[project.scripts]
+spinner-lib = "spinner_lib:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cli_spinners"]

@@ -30,7 +30,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     __tablename__ = "gh_starred_repo"
     __table_args__ = (sa.UniqueConstraint("node_id", "name", "url"),)
 
-    id: so.Mapped[db_lib.annotated.INT_PK]
+    # id: so.Mapped[db_lib.annotated.INT_PK]
 
     repo_id: so.Mapped[db_lib.annotated.INT_PK]
 

@@ -5,6 +5,7 @@ import json
 
 from api import helpers as api_helpers
 from api.responses import API_RESPONSE_DICT
+from api.pagination import PageParams, PagedResponseSchema
 
 from fastapi import APIRouter, Depends, Request, status
 from fastapi.encoders import jsonable_encoder
@@ -14,6 +15,10 @@ from loguru import logger as log
 from domain.github import stars as stars_domain
 from depends import db_depends
 import db_lib
+
+import sqlalchemy as sa
+import sqlalchemy.orm as so
+import sqlalchemy.exc as sa_exc
 
 
 __all__ = ["router"]
@@ -26,7 +31,7 @@ router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT, tags=t
 
 
 @router.get("/all")
-def return_all_stars() -> JSONResponse:
+def return_all_stars(request: Request, page_params: PageParams = Depends()) -> JSONResponse:
     session_pool = db_depends.get_session_pool()
     
     starred_repo_out_schemas: list[stars_domain.GithubStarredRepoOut] = []
@@ -64,7 +69,7 @@ def return_all_stars() -> JSONResponse:
     
     log.info(f"Retrieved [{len(starred_repo_out_schemas)}] Github starred repositor{'y' if len(starred_repo_out_schemas) == 1 else 'ies'}")
 
-    log.info("Start JSON encoding")
+    # log.info("Start JSON encoding")
     try:
         res_json = jsonable_encoder(starred_repo_out_schemas)
         log.info("End JSON encoding")
@@ -75,5 +80,16 @@ def return_all_stars() -> JSONResponse:
         
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"msg": "Internal server error"})
 
-    log.info("Start return response")
-    return JSONResponse(status_code=status.HTTP_200_OK, content={"starred_repositories": res_json})
+    # log.info("Start return response")
+    # return JSONResponse(status_code=status.HTTP_200_OK, content={"starred_repositories": res_json})
+    
+    return_obj: PagedResponseSchema[stars_domain.GithubStarredRepoOut] = PagedResponseSchema[stars_domain.GithubStarredRepoOut](
+        page=page_params.page,
+        page_size=page_params.size,
+        total=len(starred_repo_out_schemas),
+        items=starred_repo_out_schemas,
+    )
+    
+    return return_obj
+        
+        

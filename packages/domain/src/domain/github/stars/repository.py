@@ -28,6 +28,12 @@ class GithubStarredRepositoryDBRepository(
     def __init__(self, session: so.Session):
         super().__init__(session, GithubStarredRepositoryModel)
 
+    def get(self, repo_id: int) -> GithubStarredRepositoryModel | None:
+        return self.session.get(GithubStarredRepositoryModel, repo_id)
+    
+    def get_by_gh_id(self, id: int) -> GithubStarredRepositoryModel | None:
+        return self.session.get(GithubStarredRepositoryModel, id)
+
     def create_or_get_repo(
         self,
         github_repo: GithubStarredRepositoryModel,
@@ -59,7 +65,7 @@ class GithubStarredRepositoryDBRepository(
             )
 
             if existing_repo_owner:
-                log.info(
+                log.debug(
                     f"Existing owner found with owner_id '{repo_owner.id}'. Checking if repository '{github_repo.repo_id}' is already linked to this owner"
                 )
 
@@ -72,7 +78,7 @@ class GithubStarredRepositoryDBRepository(
                         return repo  # Return if the repo is already linked
 
                 ## Repository does not exist, add it to the owner's repositories
-                log.info(
+                log.debug(
                     f"Repository '{github_repo.repo_id}' not found under owner '{repo_owner.id}', linking repository to owner."
                 )
                 existing_repo_owner.repositories.append(github_repo)
@@ -92,7 +98,11 @@ class GithubStarredRepositoryDBRepository(
             self.session.refresh(github_repo)
 
             return github_repo
-
+        except sa_exc.IntegrityError as e:
+            msg = f"({type(e)}) IntegrityError, entity may already exist in the database, or could be malformed."
+            log.error(msg)
+            
+            raise
         except Exception as exc:
             msg = f"({type(exc)}) Unhandled exception. Details: {exc}"
             log.error(msg)
