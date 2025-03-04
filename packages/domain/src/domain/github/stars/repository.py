@@ -28,6 +28,12 @@ class GithubStarredRepositoryDBRepository(
     def __init__(self, session: so.Session):
         super().__init__(session, GithubStarredRepositoryModel)
 
+    def get(self, repo_id: int) -> GithubStarredRepositoryModel | None:
+        return self.session.get(GithubStarredRepositoryModel, repo_id)
+    
+    def get_by_gh_id(self, id: int) -> GithubStarredRepositoryModel | None:
+        return self.session.get(GithubStarredRepositoryModel, id)
+
     def create_or_get_repo(
         self,
         github_repo: GithubStarredRepositoryModel,
@@ -92,7 +98,11 @@ class GithubStarredRepositoryDBRepository(
             self.session.refresh(github_repo)
 
             return github_repo
-
+        except sa_exc.IntegrityError as e:
+            msg = f"({type(e)}) IntegrityError, entity may already exist in the database, or could be malformed."
+            log.error(msg)
+            
+            raise
         except Exception as exc:
             msg = f"({type(exc)}) Unhandled exception. Details: {exc}"
             log.error(msg)

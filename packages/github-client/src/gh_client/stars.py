@@ -10,6 +10,8 @@ from domain.github import stars as stars_domain
 from loguru import logger as log
 import settings
 
+import sqlalchemy.exc as sa_exc
+
 
 def get_starred_repos(
     api_token: str = settings.GITHUB_SETTINGS.get("GH_API_TOKEN", default=None),
@@ -36,6 +38,7 @@ def save_github_stars(
     session_pool = db_depends.get_session_pool()
 
     saved_repos: list[stars_domain.GithubStarredRepositoryModel] = []
+    existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None = []
 
     with session_pool() as session:
         api_response_repo = stars_domain.GithubStarsAPIResponseRepository(session)
@@ -56,6 +59,15 @@ def save_github_stars(
 
         log.debug("Extracting repositories and owners from API response")
         for repo_data in starred_repos:
+            existing_repo: stars_domain.GithubStarredRepositoryModel | None = gh_repository_repo.get_by_gh_id(id=repo_data["id"])
+            # existing_owner: stars_domain.GithubRepositoryOwnerModel | None = gh_o
+            if existing_repo is not None:
+                log.debug(f"Repo already exists in database [repo_id: {existing_repo.repo_id}]")
+                existing_repos.append(existing_repo)
+
+                continue
+            
+            log.debug(f"Repo does not exist in database [repo_id: {repo_data['id']}]")
             repo_owner_data = repo_data["owner"]
 
             ## Create owner model
@@ -82,6 +94,11 @@ def save_github_stars(
                     gh_repository_repo.create_or_get_repo(github_repo, repo_owner)
                 )
                 saved_repos.append(saved_repo)
+            except sa_exc.IntegrityError as exc:
+                msg = f"({type(exc)}) Repository '{repo_data['name']}' already exists in the database. Skipping save."
+                log.debug(msg)
+                
+                continue
             except Exception as exc:
                 msg = f"({type(exc)}) Unhandled exception saving repository. Details: {exc}"
                 log.error(msg)
@@ -91,4 +108,7 @@ def save_github_stars(
                 f"Processed repository: {saved_repo.name} (ID: {saved_repo.repo_id})"
             )
 
+    ## Join saved_repos and existing
+    saved_repos = saved_repos + existing_repos
+    
     return saved_repos
