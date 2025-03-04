@@ -52,9 +52,9 @@ def save_github_stars(
             log.error(msg)
             raise
 
-        log.info(f"Saved API response [{db_api_response_model.id}] to database")
+        log.debug(f"Saved API response to database [response_id: {db_api_response_model.id}]")
 
-        log.info("Extracting repositories and owners from API response")
+        log.debug("Extracting repositories and owners from API response")
         for repo_data in starred_repos:
             repo_owner_data = repo_data["owner"]
 

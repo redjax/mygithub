@@ -80,7 +80,7 @@ class GithubStarredRepositoryDBRepository(
 
             else:
                 ## Owner does not exist, create new owner and repository
-                log.info(
+                log.debug(
                     f"Owner '{repo_owner.id}' not found, creating new owner and linking repository."
                 )
                 github_repo.owner = repo_owner
