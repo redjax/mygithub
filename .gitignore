@@ -208,3 +208,4 @@ site/
 .data/*
 
 *.json
+!my_stars.json

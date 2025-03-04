@@ -59,7 +59,7 @@ class GithubStarredRepositoryDBRepository(
             )
 
             if existing_repo_owner:
-                log.info(
+                log.debug(
                     f"Existing owner found with owner_id '{repo_owner.id}'. Checking if repository '{github_repo.repo_id}' is already linked to this owner"
                 )
 
@@ -72,7 +72,7 @@ class GithubStarredRepositoryDBRepository(
                         return repo  # Return if the repo is already linked
 
                 ## Repository does not exist, add it to the owner's repositories
-                log.info(
+                log.debug(
                     f"Repository '{github_repo.repo_id}' not found under owner '{repo_owner.id}', linking repository to owner."
                 )
                 existing_repo_owner.repositories.append(github_repo)
