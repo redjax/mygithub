@@ -206,3 +206,5 @@ site/
 
 ## Ignore data directory
 .data/*
+
+*.json
