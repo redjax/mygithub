@@ -28,6 +28,7 @@ dependencies = [
     "pymysql>=1.1.1",
     "settings-lib",
     "setup-lib",
+    "spinner-lib",
     "sqlalchemy>=2.0.38",
 ]
 
@@ -58,6 +59,7 @@ cli = { workspace = true }
 datalab = { workspace = true }
 dataframe-lib = { workspace = true }
 api = { workspace = true }
+spinner-lib = { workspace = true }
 
 [dependency-groups]
 dev = [
