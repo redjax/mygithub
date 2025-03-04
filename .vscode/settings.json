@@ -8,6 +8,7 @@
         "./libs/http-lib/src",
         "./libs/settings-lib/src",
         "./libs/setup-lib/src",
+        "./libs/spinner-lib/src",
         "./packages/domain/src",
         "./packages/controllers/src",
         "./packages/github-client/src",
