@@ -39,13 +39,14 @@ def return_all_stars() -> JSONResponse:
             all_starredrepo_models: list[stars_domain.GithubStarredRepositoryModel] = repo.get_all()
             
             if len(all_starredrepo_models) == 0:
-                return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"msg": "No repositories found"})
+                return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"starred_repositories": json.dumps([])})
             
             log.info(f"Retrieved {len(all_starredrepo_models)} Github starred repositories")
             
             for starred_model in all_starredrepo_models:
                 try:
                     starred_schema: stars_domain.GithubStarredRepoOut = stars_domain.converters.convert_github_starred_repo_db_model_to_schema(starred_repo_model=starred_model)
+                    # starred_schema.id = starred_model.id
                     starred_repo_out_schemas.append(starred_schema)
                 except Exception as exc:
                     msg = f"({type(exc)}) Error converting model to schema. Details: {exc}"
