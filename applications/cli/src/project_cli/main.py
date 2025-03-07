@@ -25,8 +25,18 @@ for sub_cli in MOUNT_SUB_CLIS:
 @app.meta.default
 def cli_launcher(
     *tokens: t.Annotated[str, Parameter(show=False, allow_leading_hyphen=True)],
-    debug: t.Annotated[bool, Parameter("--debug", show_default=True, help="Enable debug logging.")] = False,
-    log_file: t.Annotated[str, Parameter("--log-file", show_default=True, help="Path to a file where logs will be saved. Default is None.")] | None = None,
+    debug: t.Annotated[
+        bool, Parameter("--debug", show_default=True, help="Enable debug logging.")
+    ] = False,
+    log_file: t.Annotated[
+        str,
+        Parameter(
+            "--log-file",
+            show_default=True,
+            help="Path to a file where logs will be saved. Default is None.",
+        ),
+    ]
+    | None = None,
 ):
     """CLI entrypoint.
 
@@ -49,13 +59,13 @@ def cli_launcher(
             format="{time:YYYY-MM-DD HH:mm:ss} [{level}] : {message}",
             level="INFO",
         )
-        
+
     if log_file:
         log.add(
             log_file,
             format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}.{function}:{line} |> {message}",
             level="DEBUG",
-            rotation="15MB"
+            rotation="15MB",
         )
 
     app(tokens)

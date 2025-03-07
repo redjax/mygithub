@@ -14,7 +14,14 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.sql as sa_sql
 
-__all__ = ["db_app", "_init_db", "SEED_DATA_DIR", "show_db_info", "count_db_rows", "test_db"]
+__all__ = [
+    "db_app",
+    "_init_db",
+    "SEED_DATA_DIR",
+    "show_db_info",
+    "count_db_rows",
+    "test_db",
+]
 
 db_app = App(name="db", help="CLI for managing the database.")
 

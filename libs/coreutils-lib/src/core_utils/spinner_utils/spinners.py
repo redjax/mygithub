@@ -10,13 +10,14 @@ import contextlib
 
 __all__ = ["SimpleSpinner"]
 
+
 class SimpleSpinner(contextlib.ContextDecorator):
     def __init__(self, message="Processing"):
         self.message = message
-        self.spinner = itertools.cycle(['-', '/', '|', '\\'])
+        self.spinner = itertools.cycle(["-", "/", "|", "\\"])
         self.stop_event = threading.Event()
         self.spinner_thread = None
-        
+
         self.logger: logging.Logger | None = None
 
     def spin(self):
@@ -34,7 +35,7 @@ class SimpleSpinner(contextlib.ContextDecorator):
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop_event.set()
         self.spinner_thread.join()
-        sys.stdout.write('\r')
+        sys.stdout.write("\r")
         sys.stdout.flush()
         if exc_type is None:
             self.logger.info(f"\r{self.message} Complete!")

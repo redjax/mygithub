@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import time
+
 from cli_spinners import CustomSpinner
 
 if __name__ == "__main__":

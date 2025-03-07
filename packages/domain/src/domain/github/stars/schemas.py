@@ -65,7 +65,7 @@ class GithubStarredRepoBase(BaseModel):
     node_id: str
     name: str
     private: bool
-    owner: GithubRepositoryOwnerBase | None =  Field(default=None)
+    owner: GithubRepositoryOwnerBase | None = Field(default=None)
     html_url: str
     description: str | None = Field(default=None)
     fork: bool
