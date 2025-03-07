@@ -206,3 +206,6 @@ site/
 
 ## Ignore data directory
 .data/*
+
+*.json
+!my_stars.json

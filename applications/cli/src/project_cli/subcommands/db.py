@@ -14,6 +14,8 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.sql as sa_sql
 
+__all__ = ["db_app", "_init_db", "SEED_DATA_DIR", "show_db_info", "count_db_rows", "test_db"]
+
 db_app = App(name="db", help="CLI for managing the database.")
 
 SEED_DATA_DIR: str = ".data/seed_data"
@@ -25,7 +27,8 @@ def _init_db():
     log.info("Initializing database.")
 
     try:
-        setup.setup_database()
+        with CustomSpinner(text="Initializing database..."):
+            setup.setup_database()
         log.success("Database initialized.")
     except Exception as exc:
         msg = f"({type(exc)}) Error initializing database. Details: {exc}"
@@ -101,7 +104,8 @@ def count_db_rows(table: t.Annotated[str, Parameter(name="table", show_default=T
 
         query = sa_sql.text(f"SELECT COUNT(*) FROM {table}")
         try:
-            count = session.execute(query).scalar()
+            with CustomSpinner("Counting rows..."):
+                count = session.execute(query).scalar()
         except Exception as exc:
             msg = (
                 f"({type(exc)}) Error counting rows in table '{table}'. Details: {exc}"
