@@ -15,6 +15,8 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 
+from cli_spinners import CustomSpinner
+
 __all__ = ["gh_stars_app", "get_user_stars"]
 
 gh_stars_app = App(name="stars", help="Github starred repositories")
@@ -61,6 +63,7 @@ def get_user_stars(
     if save_db:
         log.info("Saving requested repositories to database")
 
+        log.info(f"Saving [{len(starred_repos)}] starred repositories to database...")
         try:
             with CustomSpinner(f"Saving [{len(starred_repos)}] starred repositories to database..."):
                 saved_stars = gh_client.save_github_stars(starred_repos=starred_repos)
