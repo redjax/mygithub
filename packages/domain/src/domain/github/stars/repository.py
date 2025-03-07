@@ -30,13 +30,16 @@ class GithubStarredRepositoryDBRepository(
 
     def get(self, repo_id: int) -> GithubStarredRepositoryModel | None:
         return self.session.get(GithubStarredRepositoryModel, repo_id)
-    
+
     def get_by_gh_id(self, id: int) -> GithubStarredRepositoryModel | None:
         return self.session.get(GithubStarredRepositoryModel, id)
-    
+
     def get_by_node_id(self, node_id: int) -> GithubStarredRepositoryModel | None:
-        return self.session.query(GithubStarredRepositoryModel).filter(GithubStarredRepositoryModel.node_id == node_id).one_or_none()
-    
+        return (
+            self.session.query(GithubStarredRepositoryModel)
+            .filter(GithubStarredRepositoryModel.node_id == node_id)
+            .one_or_none()
+        )
 
     def create_or_get_repo(
         self,
@@ -53,11 +56,13 @@ class GithubStarredRepositoryDBRepository(
                 .filter(GithubStarredRepositoryModel.repo_id == github_repo.repo_id)
                 .one_or_none()
             )
-            
+
         except Exception as exc:
-            msg = f"({type(exc)}) Error checking for existing repository. Defails: {exc}"
+            msg = (
+                f"({type(exc)}) Error checking for existing repository. Defails: {exc}"
+            )
             log.error(msg)
-            
+
             raise exc
 
         if existing_repo is not None:
@@ -84,18 +89,18 @@ class GithubStarredRepositoryDBRepository(
                     log.info(
                         f"Repository '{github_repo.repo_id}' is already linked to owner '{repo_owner.id}'. Returning existing repository."
                     )
-                    
+
                     return self.session.get(repo)
 
             # Repository does not exist, add it to the owner's repositories
             log.debug(
                 f"Repository '{github_repo.repo_id}' not found under owner '{repo_owner.id}', linking repository to owner."
             )
-            
+
             try:
                 existing_repo_owner.repositories.append(github_repo)
                 self.session.add(existing_repo_owner)
-                
+
                 repo_owner = existing_repo_owner
             except Exception as exc:
                 msg = f"({type(exc)}) Unhandled exception adding repository to owner. Details: {exc}"
@@ -109,13 +114,13 @@ class GithubStarredRepositoryDBRepository(
             log.debug(
                 f"Owner '{repo_owner.id}' not found, creating new owner and linking repository."
             )
-            
+
             try:
                 self.session.add(repo_owner)
             except Exception as exc:
                 msg = f"({type(exc)}) Error creating repository owner entity. Details: {exc}"
                 log.error(msg)
-                
+
                 raise exc
 
         ## Add repository owner to repository entity
@@ -140,8 +145,6 @@ class GithubStarredRepositoryDBRepository(
 
         return github_repo
 
-
-
     def delete_repo(self, repo_id: int) -> None:
         """Deletes a repository if it exists."""
         repo = self.session.get(GithubStarredRepositoryModel, repo_id)
@@ -150,11 +153,22 @@ class GithubStarredRepositoryDBRepository(
             self.session.commit()
 
     def get_all(self) -> list[GithubStarredRepositoryModel]:
-        return self.session.execute(sa.select(GithubStarredRepositoryModel)).scalars().all()
-    
-    def get_all_paginated(self, offset: int, limit: int) -> t.List[GithubStarredRepositoryModel]:
-        return self.session.query(GithubStarredRepositoryModel).offset(offset).limit(limit).all()
-    
+        return (
+            self.session.execute(sa.select(GithubStarredRepositoryModel))
+            .scalars()
+            .all()
+        )
+
+    def get_all_paginated(
+        self, offset: int, limit: int
+    ) -> t.List[GithubStarredRepositoryModel]:
+        return (
+            self.session.query(GithubStarredRepositoryModel)
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )
+
     def count(self) -> int:
         """Get the total count of all starred repositories in the database."""
         return self.session.query(GithubStarredRepositoryModel).count()

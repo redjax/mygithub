@@ -16,6 +16,7 @@ __all__ = ["run_api_server", "api_app"]
 
 api_app = App("api", help="API operations")
 
+
 @api_app.command(name="run")
 def run_api_server(
     host: t.Annotated[
@@ -47,11 +48,13 @@ def run_api_server(
     ] = "INFO",
 ) -> None:
     log_level: str = log_level.upper()
-    
+
     if reload:
         log.info("Enabling Uvicorn server reload")
 
-    uvicorn_settings = UvicornSettings(host=host, port=port, reload=reload, log_level=log_level)
+    uvicorn_settings = UvicornSettings(
+        host=host, port=port, reload=reload, log_level=log_level
+    )
     log.debug(f"Uvicorn settings class: {uvicorn_settings}")
 
     log.info("Initializing custom Uvicorn server object")

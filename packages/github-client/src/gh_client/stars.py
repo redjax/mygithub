@@ -9,7 +9,6 @@ from depends import db_depends
 from domain.github import stars as stars_domain
 from loguru import logger as log
 import settings
-
 import sqlalchemy.exc as sa_exc
 
 
@@ -69,7 +68,7 @@ def get_starred_repos(
 #                 existing_repos.append(existing_repo)
 
 #                 continue
-            
+
 #             log.debug(f"Repo does not exist in database [repo_id: {repo_data['id']}]")
 #             repo_owner_data = repo_data["owner"]
 
@@ -100,7 +99,7 @@ def get_starred_repos(
 #             except sa_exc.IntegrityError as exc:
 #                 msg = f"({type(exc)}) Repository '{repo_data['name']}' already exists in the database. Skipping save."
 #                 log.debug(msg)
-                
+
 #                 continue
 #             except Exception as exc:
 #                 msg = f"({type(exc)}) Unhandled exception saving repository. Details: {exc}"
@@ -113,15 +112,16 @@ def get_starred_repos(
 
 #     ## Join saved_repos and existing
 #     saved_repos = saved_repos + existing_repos
-    
+
 #     return saved_repos
+
 
 def save_github_stars(
     starred_repos: list[dict],
 ) -> list[stars_domain.GithubStarredRepositoryModel]:
     session_pool = db_depends.get_session_pool()
 
-    existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None =  []
+    existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None = []
     saved_repos: list[stars_domain.GithubStarredRepositoryModel] = []
     existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None = []
 
@@ -129,23 +129,29 @@ def save_github_stars(
         api_response_repo = stars_domain.GithubStarsAPIResponseRepository(session)
         gh_repository_repo = stars_domain.GithubStarredRepositoryDBRepository(session)
 
-        db_api_response_model = stars_domain.GithubStarsAPIResponseModel(json_data=starred_repos)
+        db_api_response_model = stars_domain.GithubStarsAPIResponseModel(
+            json_data=starred_repos
+        )
 
         log.debug("Saving API response to database")
         try:
             db_api_response_model = api_response_repo.create(db_api_response_model)
         except Exception as e:
-            log.error(f"({type(e)}) Unhandled exception saving API response. Details: {e}")
+            log.error(
+                f"({type(e)}) Unhandled exception saving API response. Details: {e}"
+            )
             raise
 
-        log.debug(f"Saved API response to database [response_id: {db_api_response_model.id}]")
+        log.debug(
+            f"Saved API response to database [response_id: {db_api_response_model.id}]"
+        )
 
         # Extract all repo IDs from the API response
         # repo_ids = {repo_data["id"] for repo_data in starred_repos}
         node_ids = {repo_data["node_id"] for repo_data in starred_repos}
-        
+
         existing_node_ids = set()
-        
+
         # for _id in repo_ids:
         for _id in node_ids:
             # repo = gh_repository_repo.get_by_gh_id(id=_id)
@@ -154,25 +160,31 @@ def save_github_stars(
             if repo:
                 existing_node_ids.add(_id)
 
-        log.debug(f"Found {len(existing_node_ids)} existing repositories in the database.")
-        
+        log.debug(
+            f"Found {len(existing_node_ids)} existing repositories in the database."
+        )
+
         if len(existing_node_ids) == 0:
             log.info("No existing repositories found, committing all")
         else:
-            log.debug(f"Retrieving [{len(existing_node_ids)}] repositor(y/ies) from database")
-            
+            log.debug(
+                f"Retrieving [{len(existing_node_ids)}] repositor(y/ies) from database"
+            )
+
             for _existing_node_id in existing_node_ids:
                 repo = gh_repository_repo.get_by_node_id(node_id=_existing_node_id)
                 existing_repos.append(repo)
 
         ## Filter out repositories that already exist
         new_repos_data = [
-            repo_data for repo_data in starred_repos if repo_data["node_id"] not in existing_node_ids
+            repo_data
+            for repo_data in starred_repos
+            if repo_data["node_id"] not in existing_node_ids
         ] or []
-        
+
         if len(new_repos_data) == 0:
             log.debug("No new repositories found.")
-            
+
             return existing_repos
 
         log.info(f"Processing {len(new_repos_data)} new repositories.")
@@ -181,32 +193,44 @@ def save_github_stars(
             repo_owner_data = repo_data["owner"]
 
             # Create owner model
-            repo_owner_schema = stars_domain.GithubRepositoryOwnerIn.model_validate(repo_owner_data)
+            repo_owner_schema = stars_domain.GithubRepositoryOwnerIn.model_validate(
+                repo_owner_data
+            )
             repo_owner = stars_domain.converters.convert_github_repository_owner_schema_to_db_model(
                 owner=repo_owner_schema
             )
 
             # Create Repository Model instance
-            github_repo_schema = stars_domain.GithubStarredRepoIn.model_validate(repo_data)
-            github_repo = stars_domain.converters.convert_github_starred_repo_schema_to_db_model(
-                github_repo_schema
+            github_repo_schema = stars_domain.GithubStarredRepoIn.model_validate(
+                repo_data
+            )
+            github_repo = (
+                stars_domain.converters.convert_github_starred_repo_schema_to_db_model(
+                    github_repo_schema
+                )
             )
 
             # Save to database using repository class
             try:
-                saved_repo = gh_repository_repo.create_or_get_repo(github_repo, repo_owner)
+                saved_repo = gh_repository_repo.create_or_get_repo(
+                    github_repo, repo_owner
+                )
                 saved_repos.append(saved_repo)
             except sa_exc.IntegrityError as exc:
-                log.debug(f"IntegrityError: Repository '{repo_data['name']}' already exists. Skipping save.")
+                log.debug(
+                    f"IntegrityError: Repository '{repo_data['name']}' already exists. Skipping save."
+                )
                 session.rollback()
                 continue
             except Exception as exc:
-                log.error(f"({type(exc)}) Unhandled exception saving repository. Details: {exc}")
+                log.error(
+                    f"({type(exc)}) Unhandled exception saving repository. Details: {exc}"
+                )
                 raise
 
             log.debug(f"Saved repository: {saved_repo.name} (ID: {saved_repo.repo_id})")
 
     ## Join saved_repos and existing
     saved_repos = saved_repos + existing_repos
-    
+
     return saved_repos

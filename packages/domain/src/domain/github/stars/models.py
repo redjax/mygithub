@@ -45,7 +45,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
         sa.Integer,
         sa.ForeignKey("gh_repo_owner.id", ondelete="CASCADE"),
         nullable=False,
-        index=True
+        index=True,
     )
 
     id: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
@@ -102,7 +102,9 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     clone_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     svn_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     homepage: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, default=None)
-    size: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0, index=True)
+    size: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0, index=True
+    )
     stargazers_count: so.Mapped[int] = so.mapped_column(
         sa.NUMERIC, nullable=False, default=0, index=True
     )
@@ -154,15 +156,22 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     ## Storing a list of strings as JSON for cross-database support
     topics: so.Mapped[list[str]] = so.mapped_column(
         ## Store as TEXT in SQLite, JSON elsewhere
-        sa.JSON().with_variant(sa.Text, "sqlite"), index=True
+        sa.JSON().with_variant(sa.Text, "sqlite"),
+        index=True,
     )
     visibility: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False, index=True)
-    forks: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0, index=True)
+    forks: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0, index=True
+    )
     open_issues: so.Mapped[int] = so.mapped_column(
         sa.NUMERIC, nullable=False, default=0, index=True
     )
-    watchers: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0, index=True)
-    default_branch: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False, index=True)
+    watchers: so.Mapped[int] = so.mapped_column(
+        sa.NUMERIC, nullable=False, default=0, index=True
+    )
+    default_branch: so.Mapped[str] = so.mapped_column(
+        sa.TEXT, nullable=False, index=True
+    )
     permissions: so.Mapped[dict] = so.mapped_column(JSON, nullable=False)
 
     ## Relationship: Each repository has one owner
