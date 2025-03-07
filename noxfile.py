@@ -43,6 +43,7 @@ REQUIREMENTS_OUTPUT_DIR: Path = Path(".")
 VENV_DIR = Path("./.venv").resolve()
 
 LINT_PATHS: list[str] = ["src", "packages", "applications", "sandbox"]
+IGNORED_LINT_PATHS: list[str] = [".venv", ".nox", "alembic", "versions"]
 
 
 def install_uv_project(session: nox.Session, external: bool = False) -> None:
@@ -119,9 +120,7 @@ Double check imports in _init_.py files, ruff removes unused imports by default.
     all_python_files = [
         f
         for f in Path(".").rglob("**/*.py")
-        if ".venv" not in f.parts
-        and ".nox"
-        and ("alembic" and "versions") not in f.parts not in f.parts
+        if all([p not in f.parts for p in IGNORED_LINT_PATHS])
     ]
     log.info(f"Found [{len(all_python_files)}] Python file(s) to lint")
     for py_file in all_python_files:
