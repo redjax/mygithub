@@ -25,6 +25,13 @@ db_database = "mygithub.sqlite"
 # db_port = "5432"
 # db_database = "database-name"
 
+# db_type = "mysql"
+# db_drivername = "mysql+pymysql"
+# db_username = "mysql"
+# db_host = "<your-db-ip-or-fqdn>"
+# db_port = 3306
+# db_database = "mygithub"
+
 #####################
 # FASTAPI & UVICORN #
 #####################

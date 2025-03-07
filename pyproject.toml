@@ -65,6 +65,7 @@ spinner-lib = { workspace = true }
 dev = [
     "alembic>=1.14.1",
     "nox>=2024.10.9",
+    "pyinstrument>=5.0.1",
     "pytest-xdist>=3.6.1",
     "ruff>=0.9.5",
 ]
