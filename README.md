@@ -14,6 +14,8 @@ A Python app to interact with the Github API using a [Personal Access Token (PAT
   - [Import into another script](#import-into-another-script)
   - [Use the CLI](#use-the-cli)
 - [Supported Operations](#supported-operations)
+- [Developing](#developing)
+  - [Profiling](#profiling)
 - [Links](#links)
 
 ## Requirements
@@ -307,7 +309,28 @@ The project includes a [`cli.py` script](./cli.py), which calls the [`mygh.cli.p
 | [Merge a branch in a repository](9https://docs.github.com/en/rest/branches/branches?apiVersion=2022-11-28#merge-a-branch)                                                                  | `False`   | Merge a branch into another branch in a remote repository.                                       |
 | [Get list of commits in repository](https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits)                                                                    | `False`   | Get a list of commits in a remote repository.                                                    |
 
+## Developing
+
+### Profiling
+
+This project includes the [`pyinstrument` profiling library](https://pyinstrument.readthedocs.io/en/latest/index.html). This app profiles executions of specific scripts/apps to help spot inefficiencies and slowdowns.
+
+Usage:
+
+```shell
+## Profile the cli.py script call to the db initialization subcommand.
+#  Output to a JSON file at .profiling/
+pyinstrument --outfile=.profiling/profile.json --renderer json cli.py db init
+
+## Profile the cli.py script call to the GET Github stars request.
+#  Output to an HTML file at .profiling/
+pyinstrument --outfile=.profiling/profile.html --renderer html cli.py gh stars get --save-db
+```
+
 ## Links
 
 - [Github docs: fine-grained Personal Access Tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token)
 - [Github API docs: get user's starred repositories](https://docs.github.com/en/rest/activity/starring?apiVersion=2022-11-28#list-repositories-starred-by-the-authenticated-user)
+- [Pyinstrument docs](https://pyinstrument.readthedocs.io/en/latest/index.html)
+  - [`pyinstrument` CLI args](https://pyinstrument.readthedocs.io/en/latest/guide.html)
+  - [`pyinstrument` profile a specific chunk of code with a context manager](https://pyinstrument.readthedocs.io/en/latest/guide.html#profile-a-specific-chunk-of-code)

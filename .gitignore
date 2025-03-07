@@ -209,3 +209,7 @@ site/
 
 *.json
 !my_stars.json
+
+.profiling/*
+
+!.profiling/.gitkeep
