@@ -14,6 +14,8 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.sql as sa_sql
 
+from cli_spinners import CustomSpinner
+
 __all__ = [
     "db_app",
     "_init_db",
