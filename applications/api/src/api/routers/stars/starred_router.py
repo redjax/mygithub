@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import typing as t
 import json
+import math
 
 from api import helpers as api_helpers
 from api.responses import API_RESPONSE_DICT
+from api.pagination import PageParams, PagedResponseSchema
 
 from fastapi import APIRouter, Depends, Request, status
 from fastapi.encoders import jsonable_encoder
@@ -15,6 +17,10 @@ from domain.github import stars as stars_domain
 from depends import db_depends
 import db_lib
 
+import sqlalchemy as sa
+import sqlalchemy.orm as so
+import sqlalchemy.exc as sa_exc
+
 
 __all__ = ["router"]
 
@@ -24,9 +30,10 @@ tags: list[str] = ["stars"]
 
 router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT, tags=tags)
 
-
+       
+        
 @router.get("/all")
-def return_all_stars() -> JSONResponse:
+def return_all_stars(request: Request, page_params: PageParams = Depends()) -> JSONResponse:
     session_pool = db_depends.get_session_pool()
     
     starred_repo_out_schemas: list[stars_domain.GithubStarredRepoOut] = []
@@ -36,7 +43,14 @@ def return_all_stars() -> JSONResponse:
         with session_pool() as session:
             repo = stars_domain.GithubStarredRepositoryDBRepository(session)
             
-            all_starredrepo_models: list[stars_domain.GithubStarredRepositoryModel] = repo.get_all()
+            total_count = repo.count()
+            
+            # Calculate offset and limit for pagination
+            offset = (page_params.page - 1) * page_params.size
+            limit = page_params.size
+            
+            # Fetch paginated results from the database
+            all_starredrepo_models: list[stars_domain.GithubStarredRepositoryModel] = repo.get_all_paginated(offset=offset, limit=limit)
             
             if len(all_starredrepo_models) == 0:
                 return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"starred_repositories": json.dumps([])})
@@ -46,7 +60,6 @@ def return_all_stars() -> JSONResponse:
             for starred_model in all_starredrepo_models:
                 try:
                     starred_schema: stars_domain.GithubStarredRepoOut = stars_domain.converters.convert_github_starred_repo_db_model_to_schema(starred_repo_model=starred_model)
-                    # starred_schema.id = starred_model.id
                     starred_repo_out_schemas.append(starred_schema)
                 except Exception as exc:
                     msg = f"({type(exc)}) Error converting model to schema. Details: {exc}"
@@ -62,18 +75,23 @@ def return_all_stars() -> JSONResponse:
     if len(starred_repo_out_schemas) == 0:
         return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"msg": "No repositories found"})
     
-    log.info(f"Retrieved [{len(starred_repo_out_schemas)}] Github starred repositor{'y' if len(starred_repo_out_schemas) == 1 else 'ies'}")
-
     log.info("Start JSON encoding")
+    repo_out_dicts: list[dict] = [m.model_dump() for m in starred_repo_out_schemas]
+
+    ## Calculate total number of pages
+    total_pages = math.ceil(total_count / page_params.size)
+
     try:
-        res_json = jsonable_encoder(starred_repo_out_schemas)
-        log.info("End JSON encoding")
+        return_obj = PagedResponseSchema(
+            page=page_params.page,
+            size=page_params.size,
+            total=total_pages,
+            results=starred_repo_out_schemas,
+        )
     except Exception as exc:
-        log.info("End JSON decoding")
-        msg = f"({type(exc)}) Error encoding response. Details: {exc}"
+        msg = f"({type(exc)}) Error creating paged response. Details: {exc}"
         log.error(msg)
         
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"msg": "Internal server error"})
-
-    log.info("Start return response")
-    return JSONResponse(status_code=status.HTTP_200_OK, content={"starred_repositories": res_json})
+    
+    return return_obj

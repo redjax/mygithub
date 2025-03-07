@@ -10,6 +10,8 @@ from domain.github import stars as stars_domain
 from loguru import logger as log
 import settings
 
+import sqlalchemy.exc as sa_exc
+
 
 def get_starred_repos(
     api_token: str = settings.GITHUB_SETTINGS.get("GH_API_TOKEN", default=None),
@@ -121,6 +123,7 @@ def save_github_stars(
 
     existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None =  []
     saved_repos: list[stars_domain.GithubStarredRepositoryModel] = []
+    existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None = []
 
     with session_pool() as session:
         api_response_repo = stars_domain.GithubStarsAPIResponseRepository(session)
@@ -203,4 +206,7 @@ def save_github_stars(
 
             log.debug(f"Saved repository: {saved_repo.name} (ID: {saved_repo.repo_id})")
 
+    ## Join saved_repos and existing
+    saved_repos = saved_repos + existing_repos
+    
     return saved_repos

@@ -48,9 +48,10 @@ def get_user_stars(
             )
 
     try:
-        starred_repos: list[dict] = gh_client.get_starred_repos(
-            api_token=api_token, use_cache=use_cache, cache_ttl=cache_ttl
-        )
+        with CustomSpinner("Getting user's starred repositories...") as spinner:
+            starred_repos: list[dict] = gh_client.get_starred_repos(
+                api_token=api_token, use_cache=use_cache, cache_ttl=cache_ttl
+            )
     except Exception as exc:
         msg = f"({type(exc)}) Error getting user's starred repositories. Details: {exc}"
         log.error(msg)
@@ -64,8 +65,9 @@ def get_user_stars(
 
         log.info(f"Saving [{len(starred_repos)}] starred repositories to database...")
         try:
-            saved_stars = gh_client.save_github_stars(starred_repos=starred_repos)
-            log.success(f"Saved starred repositories to database")
+            with CustomSpinner(f"Saving [{len(starred_repos)}] starred repositories to database..."):
+                saved_stars = gh_client.save_github_stars(starred_repos=starred_repos)
+                log.success(f"Saved starred repositories to database")
         except Exception as exc:
             msg = f"({type(exc)}) Error saving starred repositories to database. Details: {exc}"
             log.error(msg)
