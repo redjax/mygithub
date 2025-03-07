@@ -46,7 +46,7 @@ def convert_github_starred_repo_schema_to_db_model(
     starred_repo: GithubStarredRepoIn,
 ) -> GithubStarredRepositoryModel:
     starred_repo_model: GithubStarredRepositoryModel = GithubStarredRepositoryModel(
-        repo_id=starred_repo.id,
+        id=starred_repo.id,
         node_id=starred_repo.node_id,
         name=starred_repo.name,
         description=starred_repo.description,
