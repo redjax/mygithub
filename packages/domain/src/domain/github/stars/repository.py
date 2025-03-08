@@ -76,6 +76,35 @@ class GithubStarredRepositoryDBRepository(
                     .filter(GithubStarredRepositoryModel.created_at == created_at)
                     .all()
                 )
+                
+    def get_by_updated_date(self, updated_at: str, cardinality: str = "on") -> t.List[GithubStarredRepositoryModel] | None:
+        log.debug(f"Getting repositories updated {cardinality if cardinality in ['on', 'before', 'after'] else 'on'} '{updated_at}'")
+        match cardinality:
+            case  "on":        
+                return (
+                    self.session.query(GithubStarredRepositoryModel)
+                    .filter(GithubStarredRepositoryModel.updated_at == updated_at)
+                    .all()
+                )
+            case "before":
+                return (
+                    self.session.query(GithubStarredRepositoryModel)
+                    .filter(GithubStarredRepositoryModel.updated_at < updated_at)
+                    .all()
+                )
+            case "after":
+                return (
+                    self.session.query(GithubStarredRepositoryModel)
+                    .filter(GithubStarredRepositoryModel.updated_at > updated_at)
+                    .all()
+                )
+            case _:
+                log.warning(f"Invalid cardinality: {cardinality}. Must be one of ['on', 'before', 'after']. Returning 'on'")
+                return (
+                    self.session.query(GithubStarredRepositoryModel)
+                    .filter(GithubStarredRepositoryModel.updated_at == updated_at)
+                    .all()
+                )
 
     def create_or_get_repo(
         self,
