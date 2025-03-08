@@ -29,7 +29,7 @@ class GithubAPIController(AbstractContextManager):
         self.cache_ttl = cache_ttl
 
         self.base_url = "https://api.github.com"
-        self.http_controller: http_lib.HttpxController | None = None
+        # self.http_controller: http_lib.HttpxController | None = None
 
     def __enter__(self) -> t.Self:
         self.http_controller = self._get_http_controller()
@@ -81,7 +81,7 @@ class GithubAPIController(AbstractContextManager):
             )
 
         url: str = f"{self.base_url}/user/starred"
-        all_stars = []
+        all_stars: list = []
 
         headers = self._default_headers()
 
@@ -111,7 +111,7 @@ class GithubAPIController(AbstractContextManager):
                         log.error(
                             f"Failed to get user's starred repositories. [{res.status_code}: {res.reason_phrase}] {res.text}"
                         )
-                        return None
+                        return []
 
                     try:
                         res_data = http_lib.decode_response(res)
@@ -129,4 +129,4 @@ class GithubAPIController(AbstractContextManager):
             log.error(msg)
             raise exc
 
-        return all_stars if all_stars else None
+        return all_stars if all_stars else []
