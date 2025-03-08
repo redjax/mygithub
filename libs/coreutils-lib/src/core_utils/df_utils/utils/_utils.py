@@ -27,7 +27,7 @@ def hide_df_index(df: pd.DataFrame) -> pd.DataFrame:
 
     """
     ## Create index of empty strings for each row in the dataframe
-    blank_index = [""] * len(df)
+    blank_index: pd.Index = pd.Index([""] * len(df))
     ## Set the dataframe's index to the list of empty strings
     df.index = blank_index
 
@@ -35,7 +35,7 @@ def hide_df_index(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def rename_df_cols(
-    df: pd.DataFrame = None, col_rename_map: dict[str, str] = None
+    df: pd.DataFrame, col_rename_map: dict[str, str]
 ) -> pd.DataFrame:
     """Return a DataFrame with columns renamed based on input col_rename_map.
 
@@ -65,10 +65,10 @@ def rename_df_cols(
 
         return df
     except Exception as exc:
-        msg = Exception(
+        rename_df_err_msg = Exception(
             f"Unhandled exception renaming DataFrame columns. Details: {exc}"
         )
-        log.error(msg)
+        log.error(rename_df_err_msg)
 
         raise exc
 
@@ -97,7 +97,7 @@ def sort_df_by_col(df: pd.DataFrame, col_name: str, order: str = "asc") -> pd.Da
 
 
 def get_oldest_newest(
-    df: pd.DataFrame = None, date_col: str = None, filter_cols: list[str] | None = None
+    df: pd.DataFrame, date_col: str, filter_cols: list[str] | None = None
 ) -> t.Union[pd.Series, pd.DataFrame]:
     """Get the oldest and newest rows in a DataFrame.
 
@@ -117,8 +117,8 @@ def get_oldest_newest(
         raise ValueError("Missing name of date column to sort by")
 
     try:
-        min_date = df[date_col].min()
-        oldest = df.loc[df[date_col] == min_date]
+        min_date  = df[date_col].min()
+        oldest  = df.loc[df[date_col] == min_date]
 
     except Exception as exc:
         msg = Exception(
@@ -150,4 +150,6 @@ def get_oldest_newest(
 
             raise exc
 
-    return oldest, newest
+    oldest_newest_df: pd.DataFrame = pd.DataFrame.from_dict({"oldest": [oldest.iloc[0]['date']], "newest": [newest.iloc[0]['date']]})
+
+    return oldest_newest_df
