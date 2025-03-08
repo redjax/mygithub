@@ -92,35 +92,54 @@ class GithubAPIController(AbstractContextManager):
             with self.http_controller as http_ctl:
                 while url:
                     # Only use params for the first request, after that, use direct URLs from pagination
-                    req: httpx.Request = http_lib.build_request(
-                        url=url,
-                        headers=headers,
-                        params=params
-                        if url == f"{self.base_url}/user/starred"
-                        else None,
-                    )
-                    res = http_ctl.send_request(req)
+                    try:
+                        req: httpx.Request = http_lib.build_request(
+                            url=url,
+                            headers=headers,
+                            params=params
+                            if url == f"{self.base_url}/user/starred"
+                            else None,
+                        )
+                    except Exception as e:
+                        build_req_err = f"({type(e)}) Error building request. Details: {e}"
+                        log.error(build_req_err)
+                        
+                        raise e
+                
+                try:
+                    res: httpx.Response = http_ctl.send_request(req)
+                    res.raise_for_status()
                     log.debug(f"Next page links: {res.links}")
 
                     if res.status_code != 200:
                         log.error(
                             f"Failed to get user's starred repositories. [{res.status_code}: {res.reason_phrase}] {res.text}"
                         )
-                        return []
-
-                    try:
-                        res_data = http_lib.decode_response(res)
-                        all_stars.extend(res_data)
-                    except Exception as exc:
-                        msg = f"({type(exc)}) Error decoding user's starred repositories. Details: {exc}"
-                        log.error(msg)
-                        raise exc
-
-                    # Get the next page URL from the response links
-                    url = res.links.get("next", {}).get("url")
+                    return []
+                except Exception as e:
+                    req_stars_err = f"({type(e)}) Error getting user's starred repositories. Details: {e}"
+                    log.error(req_stars_err)
+                    
+                    raise e
 
         except Exception as exc:
             msg = f"({type(exc)}) Error getting user's starred repositories. Details: {exc}"
+            log.error(msg)
+            raise exc
+
+        try:
+            res_data = http_lib.decode_response(res)
+            all_stars.extend(res_data)
+        except Exception as exc:
+            msg = f"({type(exc)}) Error decoding user's starred repositories. Details: {exc}"
+            log.error(msg)
+            raise exc
+
+        # Get the next page URL from the response links
+        try:
+            url = res.links.get("next", {}).get("url")
+        except Exception as exc:
+            msg = f"({type(exc)}) Error getting next page URL. Details: {exc}"
             log.error(msg)
             raise exc
 
