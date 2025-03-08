@@ -50,7 +50,7 @@ class AlembicController(AbstractContextManager):
         self.do_upgrade: bool = do_upgrade
 
         ## Alembic configuration object
-        self.config: Config | None = None
+        self.config: Config = None # type: ignore
 
         ## Logger for the class
         log: logging.Logger | None = None
@@ -61,7 +61,7 @@ class AlembicController(AbstractContextManager):
 
         return self
 
-    def __exit__(self, exc_type, exc_val, traceback) -> t.Literal[False] | None:
+    def __exit__(self, exc_type, exc_val, traceback) -> bool| None:
         if exc_val:
             log.error(f"({exc_type}) {exc_val}")
 
@@ -90,7 +90,11 @@ class AlembicController(AbstractContextManager):
             f"{'Simulating' if self.dry_run else 'Upgrading'} to revision: {revision}"
         )
         try:
-            command.upgrade(self.config, revision, sql=self.dry_run)
+            command.upgrade(
+                self.config,
+                revision,
+                sql=self.dry_run
+            )
             log.info(
                 f"Database {('would be ' if self.dry_run else '')}upgraded to: {revision}"
             )
