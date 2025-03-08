@@ -76,7 +76,7 @@ class BaseRepository(t.Generic[T]):
         self.session.commit()
 
     def list(self) -> list[T]:
-        return self.session.execute(sa.select(self.model)).scalars().all()
+        return list(self.session.execute(sa.select(self.model)).scalars().all())
 
     def count(self) -> int:
         """Return the count of entities in the table."""

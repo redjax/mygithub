@@ -45,4 +45,4 @@ class TableNameMixin:
 
     @so.declared_attr.directive
     def __tablename__(cls) -> str:  # noqa: D105
-        return cls.__name__.lower() + "s"
+        return cls.__tablename__.lower() + "s"
