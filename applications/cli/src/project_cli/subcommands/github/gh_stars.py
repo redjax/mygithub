@@ -52,7 +52,7 @@ def get_user_stars(
     ]
     | None = "starred.json",
     use_cache: t.Annotated[bool, Parameter("use-cache", show_default=True)] = True,
-    cache_ttl: t.Annotated[int, Parameter("cache-ttl", show_default=True)] = 900,
+    cache_ttl: t.Annotated[int, Parameter("cache-ttl", show_default=True)] = 3600,
 ):
     """Get starred repositories associated with Github PAT.
 
