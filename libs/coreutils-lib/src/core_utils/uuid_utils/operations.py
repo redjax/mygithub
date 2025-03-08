@@ -11,6 +11,7 @@ as well as returning the first n number of characters.
 
 from __future__ import annotations
 
+import typing as t
 import logging
 
 log = logging.getLogger(__name__)
@@ -51,7 +52,7 @@ def gen_uuid(as_hex: bool = False) -> Union[str, uuid.UUID]:
     return _uuid
 
 
-def trim_uuid(trim: int = 0, in_uuid: str = uuid.uuid4(), as_hex: bool = False) -> str:
+def trim_uuid(trim: int = 0, in_uuid: t.Union[str, uuid.UUID] = uuid.uuid4(), as_hex: bool = False) -> str:
     """Trim UUID string, removing n characters from end of string (where n is value of trim).
 
     Params:
@@ -86,7 +87,7 @@ def trim_uuid(trim: int = 0, in_uuid: str = uuid.uuid4(), as_hex: bool = False) 
     return _uuid
 
 
-def first_n_chars(first_n: int = 36, in_uuid: str = uuid.uuid4(), as_hex: bool = False):
+def first_n_chars(first_n: int = 36, in_uuid: t.Union[str, uuid.UUID] = uuid.uuid4(), as_hex: bool = False):
     """Return first n characters of UUID string (where n is first_n).
 
     Params:
@@ -153,7 +154,7 @@ def get_rand_uuid(
         raise ValueError("Trim and Characters values must be int")
 
     ## Generate a UUID. Returns a 36 char string, or 32 char if as_hex is set
-    _uuid: uuid.UUID = gen_uuid(as_hex=as_hex)
+    _uuid: t.Union[str, uuid.UUID] = gen_uuid(as_hex=as_hex)
 
     # if as_hex:
     trim = validate_trim(trim_in=trim, as_hex=as_hex)
@@ -162,13 +163,13 @@ def get_rand_uuid(
         characters = validate_characters(characters_in=characters, as_hex=as_hex)
 
     if trim:
-        _uuid: str = trim_uuid(trim=trim, in_uuid=_uuid, as_hex=as_hex)
+        return trim_uuid(trim=trim, in_uuid=_uuid, as_hex=as_hex)
 
     if characters:
-        _uuid: str = first_n_chars(first_n=characters, in_uuid=_uuid, as_hex=as_hex)
+        return first_n_chars(first_n=characters, in_uuid=_uuid, as_hex=as_hex)
 
     ## If as_str was passed, convert UUID to string
     if as_str:
-        _uuid: str = str(_uuid)
+        return str(_uuid)
 
     return _uuid
