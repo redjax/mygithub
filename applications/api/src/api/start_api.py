@@ -142,7 +142,7 @@ if __name__ == "__main__":
     uvicorn_settings = UvicornSettings()
     log.debug(f"Uvicorn settings object: {uvicorn_settings}")
 
-    UVICORN_SERVER: UvicornCustomServer = initialize_custom_server()
+    UVICORN_SERVER: UvicornCustomServer = initialize_custom_server(uvicorn_settings)
 
     log.info(f"Starting Uvicorn server")
     try:
