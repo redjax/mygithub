@@ -47,13 +47,13 @@ def run_api_server(
         ),
     ] = "INFO",
 ) -> None:
-    log_level: str = log_level.upper()
+    _log_level: str = log_level.upper()
 
     if reload:
         log.info("Enabling Uvicorn server reload")
 
     uvicorn_settings = UvicornSettings(
-        host=host, port=port, reload=reload, log_level=log_level
+        host=host, port=port, reload=reload, log_level=_log_level
     )
     log.debug(f"Uvicorn settings class: {uvicorn_settings}")
 
