@@ -5,7 +5,7 @@ import hashlib
 from loguru import logger as log
 
 
-def get_hash_from_str(input_str: str = None, encoding: str = "utf-8") -> str:
+def get_hash_from_str(input_str: str, encoding: str = "utf-8") -> str:
     """Return a hashed version of an input string.
 
     Params:
@@ -28,7 +28,7 @@ def get_hash_from_str(input_str: str = None, encoding: str = "utf-8") -> str:
 
     if not isinstance(input_str, str):
         try:
-            input_str: str = str(input_str)
+            _input_str: str = str(input_str)
 
         except Exception as exc:
             msg = Exception(
@@ -39,7 +39,7 @@ def get_hash_from_str(input_str: str = None, encoding: str = "utf-8") -> str:
             raise exc
 
     try:
-        hash = hashlib.md5(input_str.encode(encoding)).hexdigest()
+        hash = hashlib.md5(_input_str.encode(encoding)).hexdigest()
 
     except Exception as exc:
         msg = Exception(
