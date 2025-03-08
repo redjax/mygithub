@@ -33,12 +33,11 @@ def get_starred_repos(
 
 def save_github_stars(
     starred_repos: list[dict],
-) -> list[stars_domain.GithubStarredRepositoryModel]:
+) -> list[t.Union[stars_domain.GithubStarredRepositoryModel, None]]:
     session_pool = db_depends.get_session_pool()
 
-    existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None = []
-    saved_repos: list[stars_domain.GithubStarredRepositoryModel] = []
-    existing_repos: list[stars_domain.GithubStarredRepositoryModel] | None = []
+    existing_repos: list[t.Union[stars_domain.GithubStarredRepositoryModel, None]] = []
+    saved_repos: list[t.Union[stars_domain.GithubStarredRepositoryModel, None]] = []
 
     with session_pool() as session:
         ## Initialize DB repository classes
@@ -46,13 +45,13 @@ def save_github_stars(
         gh_repository_repo: stars_domain.GithubStarredRepositoryDBRepository = stars_domain.GithubStarredRepositoryDBRepository(session)
 
         ## Create DB entity for API response
-        db_api_response_model: stars_domain.GithubStarsAPIResponseModel = stars_domain.GithubStarsAPIResponseModel(
+        new_db_api_response_model: stars_domain.GithubStarsAPIResponseModel = stars_domain.GithubStarsAPIResponseModel(
             json_data=starred_repos
         )
 
         log.debug("Saving API response to database")
         try:
-            db_api_response_model: stars_domain.GithubStarsAPIResponseModel = api_response_repo.create(db_api_response_model)
+            db_api_response_model: stars_domain.GithubStarsAPIResponseModel = api_response_repo.create(new_db_api_response_model)
         except Exception as e:
             log.error(
                 f"({type(e)}) Unhandled exception saving API response. Details: {e}"
@@ -73,9 +72,9 @@ def save_github_stars(
         ## Loop over nodes and check for existence in DB
         for _id in node_ids:
             ## Lookup repo by node_id
-            repo: stars_domain.GithubStarredRepositoryModel = gh_repository_repo.get_by_node_id(node_id=_id)
+            existing_repo: stars_domain.GithubStarredRepositoryModel | None = gh_repository_repo.get_by_node_id(node_id=_id)
 
-            if repo:
+            if existing_repo:
                 ## Repo exists, add to set
                 existing_node_ids.add(_id)
 
@@ -93,7 +92,7 @@ def save_github_stars(
 
             ## Retrieve existing entity from the database
             for _existing_node_id in existing_node_ids:
-                repo: stars_domain.GithubStarredRepositoryModel = gh_repository_repo.get_by_node_id(node_id=_existing_node_id)
+                repo: stars_domain.GithubStarredRepositoryModel | None = gh_repository_repo.get_by_node_id(node_id=_existing_node_id)
                 existing_repos.append(repo)
 
         ## Filter out repositories that already exist
@@ -121,7 +120,7 @@ def save_github_stars(
                     repo_owner_data
                 )
             except Exception as e:
-                msg = f"({type(exc)}) Error validating repository owner schema. Details: {e}"
+                msg = f"({type(e)}) Error validating repository owner schema. Details: {e}"
                 log.error(msg)
                 
                 raise
@@ -143,7 +142,7 @@ def save_github_stars(
                     repo_data
                 )
             except Exception as e:
-                msg = f"({type(exc)}) Error validating starred repository schema. Details: {e}"
+                msg = f"({type(e)}) Error validating starred repository schema. Details: {e}"
                 log.error(msg)
                 
                 raise
@@ -185,6 +184,6 @@ def save_github_stars(
             log.debug(f"Saved repository: {saved_repo.name} (ID: {saved_repo.repo_id})")
 
     ## Join saved_repos and existing
-    saved_repos: list[stars_domain.GithubStarredRepositoryModel] = saved_repos + existing_repos
+    return_obj: list[t.Union[stars_domain.GithubStarredRepositoryModel, None]] = saved_repos + existing_repos
 
-    return saved_repos
+    return return_obj
