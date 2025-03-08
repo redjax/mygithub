@@ -66,6 +66,7 @@ dev = [
     "alembic>=1.14.1",
     "mypy>=1.15.0",
     "nox>=2024.10.9",
+    "pandas-stubs>=2.2.3.241126",
     "pyinstrument>=5.0.1",
     "pytest-xdist>=3.6.1",
     "ruff>=0.9.5",
