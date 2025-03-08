@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-import datetime
+import typing as t
 from datetime import (
     datetime as dt,
-    timedelta,
 )
-import re
 import time
 from typing import Union
 
@@ -15,7 +13,7 @@ from loguru import logger as log
 
 
 def datetime_as_str(
-    ts: dt = None, format: str = TIME_FMT_24H, safe_str: bool = False
+    ts: dt, format: str = TIME_FMT_24H, safe_str: bool = False
 ) -> str:
     """Convert a `datetime.datetime` object to a string.
 
@@ -46,7 +44,7 @@ def datetime_as_str(
     return _ts
 
 
-def datetime_as_dt(ts: str = None, format: str = TIME_FMT_24H) -> dt:
+def datetime_as_dt(ts: str, format: str = TIME_FMT_24H) -> dt:
     """Convert a datetime string to a `datetime.datetime` object.
 
     Params:
@@ -79,9 +77,9 @@ def get_ts(
     now: dt = dt.now()
 
     if as_str:
-        now: str = datetime_as_str(ts=now, format=format, safe_str=safe_str)
+        _now: str = datetime_as_str(ts=now, format=format, safe_str=safe_str)
 
-    return now
+    return _now
 
 
 def wait(s: int = 1, msg: str | None = "Waiting {} seconds...") -> None:
@@ -101,39 +99,19 @@ def wait(s: int = 1, msg: str | None = "Waiting {} seconds...") -> None:
 
     ## If msg != None, validate & print before pausing
     if msg:
+        ## Validate & print pause message
+        assert isinstance(msg, str), TypeError(
+            f"msg must be a string or None. Got type: ({type(msg)})"
+        )
+
         try:
-            ## Validate & print pause message
-            assert isinstance(msg, str), TypeError(
-                f"msg must be a string or None. Got type: ({type(msg)})"
-            )
-
-            try:
-                log.info(msg.format(s))
-            except Exception as exc:
-                ## Error compiling message text. Print an error, then wait
-                msg = Exception(
-                    f"Unhandled exception composing wait message. Details: {exc}.\nWaiting [{s}] seconds..."
-                )
-                log.error(msg)
-
+            log.info(msg.format(s))
         except Exception as exc:
             ## Error compiling message text. Print an error, then wait
-            msg = Exception(
-                f"Unhandled exception composing wait message. Details: {exc}\nWaiting [{s}] seconds..."
+            wait_msg_err = Exception(
+                f"Unhandled exception composing wait message. Details: {exc}.\nWaiting [{s}] seconds..."
             )
-            log.error(msg)
+            log.error(wait_msg_err)
 
     ## Pause
     time.sleep(s)
-
-
-if __name__ == "__main__":
-    ts = get_ts()
-
-    log.info(f"Timestamp ({type(ts)}): {ts}")
-
-    as_str: str = get_ts(as_str=True)
-    log.info(f"Timestamp: datetime to str Type({type(as_str).__name__}): {as_str}")
-
-    as_dt: dt = datetime_as_dt(ts=as_str)
-    log.info(f"Timestamp: str to datetime Type({type(as_dt).__name__}): {as_dt}")
