@@ -25,7 +25,7 @@ __all__ = [
 ]
 
 
-def fix_api_docs(app: FastAPI = None):
+def fix_api_docs(app: FastAPI):
     """Fix error loading /docs when a root_path is set.
 
     Call after declaring an app with a root_path set, for example:
@@ -51,8 +51,8 @@ def fix_api_docs(app: FastAPI = None):
 
 
 def update_tags_metadata(
-    tags_metadata: list = tags_metadata,
-    update_metadata: t.Union[list[dict[str, str]], dict[str, str]] = None,
+    update_metadata: t.Union[list[dict[str, str]], dict[str, str]],
+    tags_metadata: list = tags_metadata
 ):
     """Update the global tags_metadata list with new values.
 
@@ -95,8 +95,8 @@ def update_tags_metadata(
 
 
 def add_cors_middleware(
-    app: FastAPI = None,
-    cors: CORSMiddleware = CORSMiddleware,
+    app: FastAPI,
+    cors: t.Type[CORSMiddleware] = CORSMiddleware,
     allow_credentials: bool = default_allow_credentials,
     allowed_origins: list[str] = default_allowed_origins,
     allowed_headers: list[str] = default_allowed_headers,
@@ -104,12 +104,12 @@ def add_cors_middleware(
 ) -> FastAPI:
     try:
         app.add_middleware(
-            cors,
+            cors, # type: ignore
             allow_credentials=allow_credentials,
             allow_origins=allowed_origins,
             allow_methods=allowed_methods,
             allow_headers=allowed_headers,
-        )
+        ) # type: ignore
 
     except Exception as exc:
         msg = Exception(
@@ -122,7 +122,7 @@ def add_cors_middleware(
     return app
 
 
-def add_routers(app: FastAPI = None, routers: list[APIRouter] = None) -> FastAPI:
+def add_routers(app: FastAPI, routers: list[APIRouter]) -> FastAPI:
     if not app:
         raise ValueError("Missing FastAPI App()")
 
@@ -150,6 +150,7 @@ def add_routers(app: FastAPI = None, routers: list[APIRouter] = None) -> FastAPI
 
 
 def get_app(
+    routers: list[APIRouter],
     debug: bool = False,
     cors: bool = True,
     root_path: str = "/",
@@ -158,7 +159,6 @@ def get_app(
     version: str = "0.0.0",
     openapi_url: str = default_openapi_url,
     openapi_tags: list = tags_metadata,
-    routers: list[APIRouter] = None,
 ) -> FastAPI:
     """Generate a FastAPI app and return."""
     for _var in [root_path, title, description, version, openapi_url]:
