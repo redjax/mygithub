@@ -87,10 +87,10 @@ def get_db_uri(
 
 
 def get_engine(
-    pool: sa.Pool | None,
     url: sa.URL,
-    logging_name: str | None,
-    execution_options: dict | None,
+    pool: sa.Pool | None = None,
+    logging_name: str | None = None,
+    execution_options: dict | None = None,
     hide_parameters: bool = False,
     echo: bool = DB_SETTINGS.get("DB_ECHO", default=False),
     query_cache_size: int = 500,
