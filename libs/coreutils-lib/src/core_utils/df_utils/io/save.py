@@ -16,8 +16,8 @@ __all__ = [
 
 
 def save_pq(
-    df: pd.DataFrame = None,
-    pq_file: t.Union[str, Path] = None,
+    df: pd.DataFrame,
+    pq_file: t.Union[str, Path],
     dedupe: bool = False,
     pq_engine: str = "pyarrow",
 ) -> bool:
@@ -45,20 +45,20 @@ def save_pq(
     if pq_file is None:
         raise ValueError("Missing output path")
     if isinstance(pq_file, str):
-        pq_file: Path = Path(pq_file)
+        _pq_filepath: Path = Path(pq_file)
 
-    if pq_file.suffix != ".parquet":
-        new_str = str(f"{pq_file}.parquet")
-        pq_file: Path = Path(new_str)
+    if _pq_filepath.suffix != ".parquet":
+        new_str = str(f"{_pq_filepath}.parquet")
+        _pq_file: Path = Path(new_str)
 
-    if not pq_file.parent.exists():
+    if not _pq_file.parent.exists():
         try:
-            pq_file.parent.mkdir(exist_ok=True, parents=True)
+            _pq_file.parent.mkdir(exist_ok=True, parents=True)
         except Exception as exc:
-            msg = Exception(
-                f"Unhandled exception creating directory: {pq_file.parent}. Details: {exc}"
+            mkdir_err_msg: Exception = Exception(
+                f"Unhandled exception creating directory: {_pq_file.parent}. Details: {exc}"
             )
-            log.error(msg)
+            log.error(mkdir_err_msg)
 
             return False
 
@@ -66,22 +66,22 @@ def save_pq(
         if dedupe:
             df = df.drop_duplicates()
 
-        output = df.to_parquet(path=pq_file, engine=pq_engine)
+        output = df.to_parquet(path=pq_file, engine=pq_engine) # type: ignore
 
         return True
 
     except Exception as exc:
-        msg = Exception(
-            f"Unhandled exception saving DataFrame to Parquet file: {pq_file}. Details: {exc}"
+        save_df_err_msg = Exception(
+            f"Unhandled exception saving DataFrame to Parquet file: {_pq_file}. Details: {exc}"
         )
-        log.error(msg)
+        log.error(save_df_err_msg)
         raise exc
 
 
 def save_csv(
-    df: pd.DataFrame = None,
-    csv_file: t.Union[str, Path] = None,
-    columns: list[str] = None,
+    df: pd.DataFrame,
+    csv_file: t.Union[str, Path],
+    columns: list[str],
     dedupe: bool = False,
 ) -> bool:
     """Save DataFrame to a .csv file.
@@ -108,20 +108,20 @@ def save_csv(
     if csv_file is None:
         raise ValueError("Missing output path")
     if isinstance(csv_file, str):
-        csv_file: Path = Path(csv_file)
+        _csv_file: Path = Path(csv_file)
 
-    if csv_file.suffix != ".csv":
-        new_str = str(f"{csv_file}.csv")
-        csv_file: Path = Path(new_str)
+    if _csv_file.suffix != ".csv":
+        new_str = str(f"{_csv_file}.csv")
+        csv_filepath: Path = Path(new_str)
 
-    if not csv_file.parent.exists():
+    if not csv_filepath.parent.exists():
         try:
-            csv_file.parent.mkdir(exist_ok=True, parents=True)
+            csv_filepath.parent.mkdir(exist_ok=True, parents=True)
         except Exception as exc:
-            msg = Exception(
-                f"Unhandled exception creating directory: {csv_file.parent}. Details: {exc}"
+            csv_mkdir_err_msg = Exception(
+                f"Unhandled exception creating directory: {_csv_file.parent}. Details: {exc}"
             )
-            log.error(msg)
+            log.error(csv_mkdir_err_msg)
 
             return False
 
@@ -140,16 +140,16 @@ def save_csv(
         return True
 
     except Exception as exc:
-        msg = Exception(
+        save_df_err_msg = Exception(
             f"Unhandled exception saving DataFrame to Parquet file: {csv_file}. Details: {exc}"
         )
-        log.error(msg)
+        log.error(save_df_err_msg)
         raise exc
 
 
 def save_json(
-    df: pd.DataFrame = None,
-    json_file: t.Union[str, Path] = None,
+    df: pd.DataFrame,
+    json_file: t.Union[str, Path],
     indent: int | None = None,
 ) -> bool:
     """Save DataFrame to a .json file.
@@ -175,20 +175,20 @@ def save_json(
     if json_file is None:
         raise ValueError("Missing output path")
     if isinstance(json_file, str):
-        json_file: Path = Path(json_file)
+        json_filepath: Path = Path(json_file)
 
-    if json_file.suffix != ".json":
+    if json_filepath.suffix != ".json":
         new_str = str(f"{json_file}.json")
-        json_file: Path = Path(new_str)
+        _json_filepath: Path = Path(new_str)
 
-    if not json_file.parent.exists():
+    if not _json_filepath.parent.exists():
         try:
-            json_file.parent.mkdir(exist_ok=True, parents=True)
+            _json_filepath.parent.mkdir(exist_ok=True, parents=True)
         except Exception as exc:
-            msg = Exception(
-                f"Unhandled exception creating directory: {json_file.parent}. Details: {exc}"
+            json_dir_err_msg = Exception(
+                f"Unhandled exception creating directory: {_json_filepath.parent}. Details: {exc}"
             )
-            log.error(msg)
+            log.error(json_dir_err_msg)
 
             return False
 
@@ -197,8 +197,8 @@ def save_json(
         return True
 
     except Exception as exc:
-        msg = Exception(
+        save_json_err_msg = Exception(
             f"Unhandled exception saving DataFrame to JSON file: {json_file}. Details: {exc}"
         )
-        log.error(msg)
+        log.error(save_json_err_msg)
         raise exc
