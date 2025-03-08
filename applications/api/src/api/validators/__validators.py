@@ -12,13 +12,13 @@ __all__ = [
 ]
 
 
-def is_str(input: str) -> str:
+def is_str(input: str) -> str | None:
     if not input:
-        return
+        return None
 
     if not isinstance(input, str):
         try:
-            input: str = str(input)
+            eval_input: str = str(input)
         except Exception as exc:
             msg = Exception(
                 f"Unhandled exception convering input from type({type(input)}) to type(str). Details: {exc}"
@@ -27,10 +27,10 @@ def is_str(input: str) -> str:
 
             raise exc
 
-    return input
+    return eval_input
 
 
-def is_list_str(_list: list[str] = None) -> list[str]:
+def is_list_str(_list: list[str]) -> list[str]:
     if not _list:
         raise ValueError("Missing input list to evaluate")
 
@@ -46,25 +46,19 @@ def is_list_str(_list: list[str] = None) -> list[str]:
     return _list
 
 
-def validate_root_path(root_path: str = None) -> str:
+def validate_root_path(root_path: str) -> str:
     if not root_path:
         raise ValueError("Missing root_path value")
+        
+    evaluated_root_path: str | None = is_str(root_path)
+    
+    if not evaluated_root_path:
+        raise ValueError(f"root_path validation returned None, indicating the input value could not be converted to a string. Input value ({type(root_path)}): {root_path}")
 
-    if not isinstance(root_path, str):
-        try:
-            root_path: str = str(root_path)
-        except Exception as exc:
-            msg = Exception(
-                f"Unhandled exception convering root_path from type({type(root_path)}) to type(str)"
-            )
-            log.error(msg)
-
-            raise exc
-
-    return root_path
+    return evaluated_root_path
 
 
-def validate_openapi_tags(_tags: list[dict] = None) -> list[dict]:
+def validate_openapi_tags(_tags: list[dict]) -> list[dict]:
     if not _tags:
         raise ValueError("Missing list of tag dicts to evaluate")
 
@@ -80,7 +74,7 @@ def validate_openapi_tags(_tags: list[dict] = None) -> list[dict]:
     return _tags
 
 
-def validate_router(router: APIRouter = None, none_ok: bool = False) -> APIRouter:
+def validate_router(router: APIRouter, none_ok: bool = False) -> APIRouter:
     if not router:
         if not none_ok:
             raise ValueError("Missing APIRouter to evaluate")
