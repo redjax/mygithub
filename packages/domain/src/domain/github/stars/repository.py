@@ -34,7 +34,7 @@ class GithubStarredRepositoryDBRepository(
     def get_by_gh_id(self, id: int) -> GithubStarredRepositoryModel | None:
         return self.session.get(GithubStarredRepositoryModel, id)
 
-    def get_by_node_id(self, node_id: int) -> GithubStarredRepositoryModel | None:
+    def get_by_node_id(self, node_id: str) -> GithubStarredRepositoryModel | None:
         return (
             self.session.query(GithubStarredRepositoryModel)
             .filter(GithubStarredRepositoryModel.node_id == node_id)
@@ -67,9 +67,10 @@ class GithubStarredRepositoryDBRepository(
 
         if existing_repo is not None:
             log.debug(
-                f"Existing repository found with repo_id '{github_repo.repo_id}'. Returning model"
+                f"Existing repository found with repo_id '{existing_repo.repo_id}'. Returning model"
             )
-            return self.session.get(existing_repo)
+            
+            return self.session.get(existing_repo) # type: ignore
 
         ## Check if owner exists
         existing_repo_owner: GithubRepositoryOwnerModel | None = (
@@ -90,7 +91,7 @@ class GithubStarredRepositoryDBRepository(
                         f"Repository '{github_repo.repo_id}' is already linked to owner '{repo_owner.id}'. Returning existing repository."
                     )
 
-                    return self.session.get(repo)
+                    return self.session.get(repo) # type: ignore
 
             # Repository does not exist, add it to the owner's repositories
             log.debug(
@@ -153,11 +154,11 @@ class GithubStarredRepositoryDBRepository(
             self.session.commit()
 
     def get_all(self) -> list[GithubStarredRepositoryModel]:
-        return (
+        return list((
             self.session.execute(sa.select(GithubStarredRepositoryModel))
             .scalars()
             .all()
-        )
+        ))
 
     def get_all_paginated(
         self, offset: int, limit: int
