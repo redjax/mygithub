@@ -9,10 +9,6 @@ from .routers import api_router
 from fastapi import APIRouter, FastAPI
 from settings.api_settings import FASTAPI_SETTINGS
 
-fastapi_app: FastAPI = api_utils.get_app(
-    debug=...,
-)
-
 INCLUDE_ROUTERS: list[APIRouter] = [api_router.router]
 
 fastapi_app: FastAPI = api_utils.get_app(
