@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import typing as t
+import enum
 
 from api import helpers as api_helpers
 from api.pagination import PagedResponseSchema, PageParams
@@ -23,7 +24,7 @@ __all__ = ["router"]
 
 prefix: str = "/stars"
 
-tags: list[str] = ["stars"]
+tags: list[t.Union[str, enum.Enum]] = ["stars"]
 
 router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT, tags=tags)
 
@@ -31,7 +32,7 @@ router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT, tags=t
 @router.get("/all")
 def return_all_stars(
     request: Request, page_params: PageParams = Depends()
-) -> JSONResponse:
+) -> JSONResponse | PagedResponseSchema:
     session_pool = db_depends.get_session_pool()
 
     starred_repo_out_schemas: list[stars_domain.GithubStarredRepoOut] = []
