@@ -31,7 +31,7 @@ def get_user_stars(
             show_default=True,
             help="The Github PAT to use with the API. If None/empty, will try to load from the environment.",
         ),
-    ] = None,
+    ] | None= None,
     save_db: t.Annotated[
         bool,
         Parameter(
@@ -101,9 +101,7 @@ def get_user_stars(
         if json_file is None:
             json_file = "starred.json"
 
-        json_file: Path = Path(json_file)
-
-        if json_file.exists():
+        if Path(json_file).exists():
             log.warning(
                 f"JSON file '{json_file}' already exists and will be overwritten"
             )
