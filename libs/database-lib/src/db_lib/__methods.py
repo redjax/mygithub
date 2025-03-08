@@ -55,9 +55,9 @@ def get_db_uri(
                 port = None
             else:
                 try:
-                    port: int = int(port)
+                    _port: int = int(port)
                 except Exception as exc:
-                    msg = f"({type(exc)}) 'port' must be of type int. Got type: ({type(port)}), and failed converting to int."
+                    msg = f"({type(exc)}) 'port' must be of type int. Got type: ({type(_port)}), and failed converting to int."
                     log.error(msg)
 
                     raise exc
@@ -73,7 +73,7 @@ def get_db_uri(
             username=username,
             password=password,
             host=host,
-            port=port,
+            port=_port,
             database=database,
         )
 
@@ -87,10 +87,10 @@ def get_db_uri(
 
 
 def get_engine(
-    pool: sa.Pool | None = None,
-    url: sa.URL = None,
-    logging_name: str | None = None,
-    execution_options: dict | None = None,
+    pool: sa.Pool | None,
+    url: sa.URL,
+    logging_name: str | None,
+    execution_options: dict | None,
     hide_parameters: bool = False,
     echo: bool = DB_SETTINGS.get("DB_ECHO", default=False),
     query_cache_size: int = 500,
@@ -108,7 +108,7 @@ def get_engine(
     return engine
 
 
-def get_session_pool(engine: sa.Engine = None) -> so.sessionmaker[so.Session]:
+def get_session_pool(engine: sa.Engine) -> so.sessionmaker[so.Session]:
     """Return a SQLAlchemy session pool.
 
     Params:
@@ -129,7 +129,7 @@ def get_session_pool(engine: sa.Engine = None) -> so.sessionmaker[so.Session]:
 
 
 def create_base_metadata(
-    base: so.DeclarativeBase = None, engine: sa.Engine = None
+    base: so.DeclarativeBase, engine: sa.Engine
 ) -> None:
     """Create a SQLAlchemy base object's table metadata.
 
@@ -169,11 +169,11 @@ def count_table_rows(table: str, engine: sa.Engine, echo: bool = False) -> int:
     with session_pool() as session:
         if not sa.inspect(engine).has_table(table):
             log.error(f"Table '{table}' does not exist.")
-            return
+            return 0
 
         query = sa_sql.text(f"SELECT COUNT(*) FROM {table}")
         try:
-            count = session.execute(query).scalar()
+            count: int = session.execute(query).scalar() or 0
         except Exception as exc:
             msg = (
                 f"({type(exc)}) Error counting rows in table '{table}'. Details: {exc}"
@@ -206,4 +206,4 @@ def show_table_names(engine: sa.Engine, echo: bool = False) -> list[str]:
         return tables
     else:
         log.warning("No tables found in the database.")
-        return
+        return []
