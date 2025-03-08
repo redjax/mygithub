@@ -150,7 +150,7 @@ def add_routers(app: FastAPI, routers: list[APIRouter]) -> FastAPI:
 
 
 def get_app(
-    routers: list[APIRouter],
+    routers: list[APIRouter] | None,
     debug: bool = False,
     cors: bool = True,
     root_path: str = "/",
