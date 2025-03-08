@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dynaconf import Dynaconf
+from dynaconf import Dynaconf  # type: ignore
 from loguru import logger as log
 
 APP_SETTINGS = Dynaconf(

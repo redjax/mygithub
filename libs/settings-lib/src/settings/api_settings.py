@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dynaconf import Dynaconf
+from dynaconf import Dynaconf # type: ignore
 
 FASTAPI_SETTINGS = Dynaconf(
     environments=True,

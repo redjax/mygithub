@@ -11,6 +11,8 @@ import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 import sqlalchemy.sql as sa_sql
 
+from .base import Base
+
 
 def get_db_uri(
     drivername: str,
@@ -129,7 +131,7 @@ def get_session_pool(engine: sa.Engine) -> so.sessionmaker[so.Session]:
 
 
 def create_base_metadata(
-    base: so.DeclarativeBase, engine: sa.Engine
+    base: t.Union[t.Type[Base], so.DeclarativeBase], engine: sa.Engine
 ) -> None:
     """Create a SQLAlchemy base object's table metadata.
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import typing as t
 from pathlib import Path
 
 import db_lib as db
@@ -10,7 +11,7 @@ import sqlalchemy.orm as so
 
 
 def setup_database(
-    sqla_base: so.DeclarativeBase = db.Base,
+    sqla_base: t.Union[t.Type[db.Base], so.DeclarativeBase] = db.Base,
     engine: sa.Engine = db_depends.get_db_engine(),
 ) -> None:
     """Setup the database tables and metadata.
@@ -19,15 +20,21 @@ def setup_database(
         sqla_base (sqlalchemy.orm.DeclarativeBase): A SQLAlchemy `DeclarativeBase` object to use for creating metadata.
         engine (sqlalchemy.Engine): A SQLAlchemy `Engine` to use for database connections.
     """
-    engine: sa.Engine = engine
+    _engine: sa.Engine = engine
 
     ## Check if the driver is SQLite
-    if engine.dialect.name == "sqlite":
+    if _engine.dialect.name == "sqlite":
         ## Get the database file path from the engine's URL
-        db_file_path = engine.url.database
+        db_file_path: str | None = _engine.url.database
+        
+        if db_file_path is None:
+            msg = "Detected SQLite database, but could not get path."
+            log.error(msg)
+            raise ValueError(msg)
+        
 
         ## Get the parent directory of the database file
-        parent_dir = Path(db_file_path).parent
+        parent_dir: Path = Path(db_file_path).parent
 
         ## Check if the parent directory exists
         if not parent_dir.exists():
