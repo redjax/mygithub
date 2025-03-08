@@ -14,7 +14,7 @@ from sqlalchemy import engine_from_config, pool
 # access to the values within the .ini file in use.
 config = context.config
 config.set_main_option(
-    "sqlalchemy.url", db_depends.get_db_uri().render_as_string(hide_password=False)
+    "sqlalchemy.url", db_depends.get_db_uri().render_as_string(hide_password=False) # type: ignore
 )
 
 # Interpret the config file for Python logging.
