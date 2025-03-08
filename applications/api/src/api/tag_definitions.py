@@ -40,4 +40,8 @@ tags_metadata = [
         "name": "stars",
         "description": "Endpoints for working with your starred repositories.",
     },
+    {
+        "name": "search",
+        "description": "Endpoints for searching the database.",
+    }
 ]
