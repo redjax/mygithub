@@ -1,5 +1,5 @@
 import typing as t
-from halo import Halo
+from halo import Halo # type: ignore
 
 __all__ = ["CustomSpinner"]
 
