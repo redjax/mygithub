@@ -13,4 +13,4 @@ CLIENT_ERROR_CODES: list[int] = [400, 401, 402, 403, 404, 405, 406, 407, 408, 40
 ## Common HTTP server error response codes
 SERVER_ERROR_CODES: list[int] = [500, 501, 502, 503, 504, 505]
 ## Joined list of all server/client side error response codes
-ALL_ERROR_CODES: list[int] = [CLIENT_ERROR_CODES, SERVER_ERROR_CODES]
+ALL_ERROR_CODES: list[int] = CLIENT_ERROR_CODES + SERVER_ERROR_CODES

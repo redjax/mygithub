@@ -58,7 +58,7 @@ def get_file_cache_storage(
 
     ## Initialize FileStorage cache
     storage: hishel.FileStorage = hishel.FileStorage(
-        base_path=base_path, ttl=ttl, check_ttl_every=check_ttl_every
+        base_path=Path(base_path), ttl=ttl, check_ttl_every=check_ttl_every
     )
 
     return storage

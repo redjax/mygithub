@@ -17,8 +17,8 @@ import httpx
 
 
 def build_request(
+    url: str,
     method: str = "GET",
-    url: str = None,
     params: dict | None = None,
     headers: dict | None = None,
     data: dict | None = None,
@@ -43,13 +43,13 @@ def build_request(
     """
     if method is None:
         ## Default to GET on empty method
-        method: str = "GET"
+        _method: str = "GET"
     ## Ensure method is uppercase
-    method: str = method.upper()
+    _method: str = method.upper() # type: ignore
 
     ## Build request object
     request: httpx.Request = httpx.Request(
-        method=method,
+        method=_method,
         url=url,
         params=params,
         headers=headers,
@@ -63,7 +63,7 @@ def build_request(
     return request
 
 
-def decode_response(response: httpx.Response = None, encoding: str = "utf-8") -> dict:
+def decode_response(response: httpx.Response, encoding: str = "utf-8") -> dict:
     """Decode an httpx.Response object to a Python dict.
 
     Params:
@@ -101,13 +101,13 @@ def encode_data(data: t.Union[dict, str], encoding: str = "utf-8") -> bytes:
 
     """
     if isinstance(data, dict):
-        data: str = json.dumps(data, indent=2).encode(encoding)
+        encoded: bytes = json.dumps(data, indent=2).encode(encoding)
     elif isinstance(data, str):
         pass
     else:
         raise TypeError(f"Invalid type for data: ({type(data)}). Must be a dict or str")
 
-    encoded: bytes = data.encode(encoding)
+    # encoded: bytes = _data.encode(encoding)
 
     return encoded
 
@@ -125,7 +125,7 @@ def save_json(
     """
     ## Ensure filename ends with .json
     if not str(output_file).endswith(".json"):
-        output_file: str = f"{output_file}.json"
+        output_file: str = f"{output_file}.json" # type: ignore
 
     ## If path exists, ensure overwrite=True before continuing
     if Path(str(output_file)).exists():
