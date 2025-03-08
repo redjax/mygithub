@@ -87,7 +87,7 @@ def get_db_uri(
 
 
 def get_engine(
-    url: sa.URL,
+    url: sa.URL | str,
     pool: sa.Pool | None = None,
     logging_name: str | None = None,
     execution_options: dict | None = None,

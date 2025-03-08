@@ -20,7 +20,7 @@ def get_db_uri(
     database: str = DB_SETTINGS.get("DB_DATABASE", default="demo.sqlite"),
     as_str: bool = False,
     hide_password: bool = True,
-) -> sa.URL:
+) -> sa.URL | str:
     """Construct a SQLAlchemy `URL` for a database connection.
 
     Params:
@@ -51,7 +51,7 @@ def get_db_uri(
         else:
             return db_uri
 
-    db_uri: sa.URL = db.get_db_uri(
+    _db_uri: sa.URL = db.get_db_uri(
         drivername=drivername,
         username=username,
         password=password,
@@ -60,13 +60,10 @@ def get_db_uri(
         database=database,
     )
 
-    if as_str:
-        return str(db_uri)
-    else:
-        return db_uri
+    return _db_uri
 
 
-def get_db_engine(db_uri: sa.URL = get_db_uri(), echo: bool = False) -> sa.Engine:
+def get_db_engine(db_uri: sa.URL | str = get_db_uri(), echo: bool = False) -> sa.Engine:
     """Construct a SQLAlchemy `Engine` for a database connection.
 
     Params:
