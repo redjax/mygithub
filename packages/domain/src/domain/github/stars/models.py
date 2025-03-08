@@ -94,8 +94,6 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     labels_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     releases_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     deployments_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
-    created_at: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
-    updated_at: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     pushed_at: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     git_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     ssh_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
