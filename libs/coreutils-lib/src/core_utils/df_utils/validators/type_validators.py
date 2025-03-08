@@ -22,7 +22,7 @@ VALID_COL_TYPES: list[str] = [
 ]
 
 
-def validate_df_col_type(col_type: str = None) -> str:
+def validate_df_col_type(col_type: str) -> str:
     """Validate a given column type is in the list of allowed column types.
 
     Params:
