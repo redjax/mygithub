@@ -25,7 +25,7 @@ def main(
     )
 
     with gh_api_controller as gh:
-        starred_repos = gh.get_user_stars()
+        starred_repos: list[dict[str, t.Any]] = gh.get_user_stars()
 
     log.debug(f"Found [{len(starred_repos)}] starred repositories.")
 

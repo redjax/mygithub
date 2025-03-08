@@ -65,7 +65,7 @@ class GithubAPIController(AbstractContextManager):
         results_per_page: int = 30,
         sort_by: str = "created",
         sort_direction: str = "desc",
-    ) -> t.Optional[list[dict[str, t.Any]]]:
+    ) -> list[dict[str, t.Any]]:
         """Fetch all starred repositories of the authenticated user, handling pagination."""
         if results_per_page < 1 or results_per_page > 100:
             raise ValueError(
