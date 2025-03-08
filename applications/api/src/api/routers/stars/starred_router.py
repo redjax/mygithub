@@ -114,3 +114,24 @@ def return_all_stars(
         )
 
     return return_obj
+
+
+@router.get("/count")
+def count_stars(request: Request) -> JSONResponse:
+    session_pool = db_depends.get_session_pool()
+
+    try:
+        with session_pool() as session:
+            repo = stars_domain.GithubStarredRepositoryDBRepository(session)
+
+            count = repo.count()
+
+            return JSONResponse(status_code=status.HTTP_200_OK, content={"count": count})
+    except Exception as exc:
+        msg = f"({type(exc)}) Error counting Github stars. Details: {exc}"
+        log.error(msg)
+
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"msg": "Internal server error"},
+        )
