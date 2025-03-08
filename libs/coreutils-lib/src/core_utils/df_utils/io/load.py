@@ -19,7 +19,7 @@ __all__ = [
 
 
 def load_pqs_to_df(
-    search_dir: str = None, filetype: str = ".parquet"
+    search_dir: str, filetype: str = ".parquet"
 ) -> list[pd.DataFrame]:
     """Load data export files in search_dir into list of DataFrames.
 
@@ -61,7 +61,7 @@ def load_pqs_to_df(
 
 
 def load_pq(
-    pq_file: t.Union[str, Path] = None, pq_engine: str = "pyarrow"
+    pq_file: t.Union[str, Path], pq_engine: str = "pyarrow"
 ) -> pd.DataFrame:
     """Return a DataFrame from a previously saved .parquet file.
 
@@ -75,20 +75,20 @@ def load_pq(
     if pq_file is None:
         raise ValueError("Missing pq_file to load")
     if isinstance(pq_file, str):
-        pq_file: Path = Path(pq_file)
+        _pq: Path = Path(pq_file)
 
-    if not pq_file.suffix == ".parquet":
-        pq_file: Path = Path(f"{pq_file}.parquet")
+    if not _pq.suffix == ".parquet":
+        pq_path: Path = Path(f"{pq_file}.parquet")
 
-    if not pq_file.exists():
-        msg = FileNotFoundError(f"Could not find Parquet file at '{pq_file}'")
+    if not pq_path.exists():
+        fnf: FileNotFoundError = FileNotFoundError(f"Could not find Parquet file at '{pq_file}'")
         # log.error(msg)
-        log.error(msg)
+        log.error(fnf)
 
-        raise exc
+        raise fnf
 
     try:
-        df = pd.read_parquet(pq_file, engine=pq_engine)
+        df = pd.read_parquet(pq_file, engine=pq_engine) # type: ignore
 
         return df
 
@@ -101,7 +101,7 @@ def load_pq(
         raise exc
 
 
-def load_csv(csv_file: t.Union[str, Path] = None, delimiter: str = ",") -> pd.DataFrame:
+def load_csv(csv_file: t.Union[str, Path], delimiter: str = ",") -> pd.DataFrame:
     """Load a CSV file into a DataFrame.
 
     Params:
@@ -116,16 +116,16 @@ def load_csv(csv_file: t.Union[str, Path] = None, delimiter: str = ",") -> pd.Da
         raise ValueError("Missing output path")
 
     if isinstance(csv_file, str):
-        csv_file: Path = Path(csv_file)
+        _csv: Path = Path(csv_file)
 
-    if csv_file.suffix != ".csv":
-        new_str = str(f"{csv_file}.csv")
-        csv_file: Path = Path(new_str)
+    if _csv.suffix != ".csv":
+        new_str = str(f"{_csv}.csv")
+        _csv_path: Path = Path(new_str)
 
-    if not csv_file.exists():
-        msg = FileNotFoundError(f"Could not find CSV file: '{csv_file}'.")
-        log.error(msg)
-        raise exc
+    if not _csv_path.exists():
+        fnf = FileNotFoundError(f"Could not find CSV file: '{csv_file}'.")
+        log.error(fnf)
+        raise fnf
 
     try:
         df = pd.read_csv(csv_file, delimiter=delimiter)
@@ -141,7 +141,7 @@ def load_csv(csv_file: t.Union[str, Path] = None, delimiter: str = ",") -> pd.Da
         raise exc
 
 
-def load_json(json_file: t.Union[str, Path] = None) -> pd.DataFrame:
+def load_json(json_file: t.Union[str, Path]) -> pd.DataFrame:
     """Load a JSON file into a DataFrame.
 
     Params:
@@ -158,12 +158,12 @@ def load_json(json_file: t.Union[str, Path] = None) -> pd.DataFrame:
         raise ValueError("Missing input file to load")
 
     if isinstance(json_file, str):
-        json_file: Path = Path(json_file)
+        _json_filepath: Path = Path(json_file)
 
-    if not json_file.exists():
-        msg = FileNotFoundError(f"Could not find JSON file at '{json_file}'")
-        log.error(msg)
-        raise exc
+    if not _json_filepath.exists():
+        fnf = FileNotFoundError(f"Could not find JSON file at '{json_file}'")
+        log.error(fnf)
+        raise fnf
 
     try:
         df = pd.read_json(json_file, orient="records")
