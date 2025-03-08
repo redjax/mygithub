@@ -8,10 +8,10 @@ from pydantic import BaseModel, Field, ValidationError, computed_field, field_va
 
 
 class GithubStarsAPIResponseBase(BaseModel):
-    json_data: t.List[t.Dict[str, t.Any]] = Field(default_factory=[], repr=False)
+    json_data: t.List[t.Dict[str, t.Any]] = Field(default_factory=list, repr=False)
 
-    @computed_field
     @property
+    @computed_field
     def stars_count(self) -> int:
         if self.json_data:
             return len(self.json_data)
@@ -129,11 +129,11 @@ class GithubStarredRepoBase(BaseModel):
     archived: bool
     disabled: bool
     open_issues_count: int
-    license: dict | None = Field(default_factory={})
+    license: dict | None = dict()
     allow_forking: bool
     is_template: bool
     web_commit_signoff_required: bool
-    topics: t.List[str] | str | None = Field(default_factory=[])
+    topics: t.Union[t.List[str], str] | None = list()
     visibility: str
     forks: int
     open_issues: int
@@ -149,5 +149,5 @@ class GithubStarredRepoIn(GithubStarredRepoBase):
 class GithubStarredRepoOut(GithubStarredRepoBase):
     repo_id: int
 
-    created_at: datetime
-    updated_at: datetime
+    created_at: str
+    updated_at: str
