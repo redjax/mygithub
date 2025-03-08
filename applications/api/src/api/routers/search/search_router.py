@@ -27,8 +27,14 @@ tags: list[str] = ["search"]
 
 router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT, tags=tags)
 
+
 @router.get("/date/created", response_model=None)
-def search_by_created_date(request: Request, created_at: str, cardinality: str = "on", page_params: PageParams = Depends()) -> JSONResponse | PagedResponseSchema:
+def search_by_created_date(
+    request: Request,
+    created_at: str,
+    cardinality: str = "on",
+    page_params: PageParams = Depends(),
+) -> JSONResponse | PagedResponseSchema:
     session_pool = db_depends.get_session_pool()
 
     try:
@@ -38,9 +44,11 @@ def search_by_created_date(request: Request, created_at: str, cardinality: str =
             starred_repo_out_schemas: list[stars_domain.GithubStarredRepoOut] = []
 
             starred_repo_models: list[stars_domain.GithubStarredRepositoryModel] = (
-                ghrepo_repo.get_by_created_date(created_at=created_at, cardinality=cardinality)
+                ghrepo_repo.get_by_created_date(
+                    created_at=created_at, cardinality=cardinality
+                )
             )
-            
+
             total_count = ghrepo_repo.count()
 
             if len(starred_repo_models) == 0:
@@ -49,7 +57,9 @@ def search_by_created_date(request: Request, created_at: str, cardinality: str =
                     content={"starred_repositories": json.dumps([])},
                 )
 
-            log.info(f"Retrieved {len(starred_repo_models)} Github starred repositories")
+            log.info(
+                f"Retrieved {len(starred_repo_models)} Github starred repositories"
+            )
 
             for starred_model in starred_repo_models:
                 try:
@@ -79,10 +89,9 @@ def search_by_created_date(request: Request, created_at: str, cardinality: str =
             status_code=status.HTTP_404_NOT_FOUND,
             content={"msg": "No repositories found"},
         )
-        
+
     return_repos = [repo.model_dump() for repo in starred_repo_out_schemas]
-    
-    
+
     ## Calculate total number of pages
     total_pages = math.ceil(total_count / page_params.size)
 
@@ -106,7 +115,12 @@ def search_by_created_date(request: Request, created_at: str, cardinality: str =
 
 
 @router.get("/search/date/updated", response_model=None)
-def search_by_updated_date(request: Request, updated_at: str, cardinality: str = "on", page_params: PageParams = Depends()) -> JSONResponse | PagedResponseSchema:
+def search_by_updated_date(
+    request: Request,
+    updated_at: str,
+    cardinality: str = "on",
+    page_params: PageParams = Depends(),
+) -> JSONResponse | PagedResponseSchema:
     session_pool = db_depends.get_session_pool()
 
     try:
@@ -116,9 +130,11 @@ def search_by_updated_date(request: Request, updated_at: str, cardinality: str =
             starred_repo_out_schemas: list[stars_domain.GithubStarredRepoOut] = []
 
             starred_repo_models: list[stars_domain.GithubStarredRepositoryModel] = (
-                ghrepo_repo.get_by_updated_date(updated_at=updated_at, cardinality=cardinality)
+                ghrepo_repo.get_by_updated_date(
+                    updated_at=updated_at, cardinality=cardinality
+                )
             )
-            
+
             total_count = ghrepo_repo.count()
 
             if len(starred_repo_models) == 0:
@@ -127,7 +143,9 @@ def search_by_updated_date(request: Request, updated_at: str, cardinality: str =
                     content={"starred_repositories": json.dumps([])},
                 )
 
-            log.info(f"Retrieved {len(starred_repo_models)} Github starred repositories")
+            log.info(
+                f"Retrieved {len(starred_repo_models)} Github starred repositories"
+            )
 
             for starred_model in starred_repo_models:
                 try:
@@ -157,10 +175,9 @@ def search_by_updated_date(request: Request, updated_at: str, cardinality: str =
             status_code=status.HTTP_404_NOT_FOUND,
             content={"msg": "No repositories found"},
         )
-        
+
     return_repos = [repo.model_dump() for repo in starred_repo_out_schemas]
-    
-    
+
     ## Calculate total number of pages
     total_pages = math.ceil(total_count / page_params.size)
 

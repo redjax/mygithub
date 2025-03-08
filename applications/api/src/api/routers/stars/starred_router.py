@@ -126,7 +126,9 @@ def count_stars(request: Request) -> JSONResponse:
 
             count = repo.count()
 
-            return JSONResponse(status_code=status.HTTP_200_OK, content={"count": count})
+            return JSONResponse(
+                status_code=status.HTTP_200_OK, content={"count": count}
+            )
     except Exception as exc:
         msg = f"({type(exc)}) Error counting Github stars. Details: {exc}"
         log.error(msg)

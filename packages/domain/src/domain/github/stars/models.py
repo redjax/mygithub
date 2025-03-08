@@ -56,7 +56,9 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     )
     html_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     description: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, index=True)
-    fork: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False, index=True)
+    fork: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False, index=True
+    )
     url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     forks_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     keys_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)

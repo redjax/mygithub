@@ -43,5 +43,5 @@ tags_metadata = [
     {
         "name": "search",
         "description": "Endpoints for searching the database.",
-    }
+    },
 ]
