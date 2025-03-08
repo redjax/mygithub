@@ -22,7 +22,7 @@ nox.options.error_on_missing_interpreters = False
 # nox.options.report = True
 
 ## Define sessions to run when no session is specified
-nox.sessions = ["ruff-lint", "export"]
+nox.sessions = ["ruff-lint", "export"] # type: ignore
 
 ## Create logger for this module
 log: logging.Logger = logging.getLogger("nox")
@@ -139,7 +139,7 @@ def run_vulture_check(session: nox.Session):
 
 
 @nox.session(python=[DEFAULT_PYTHON], name="uv-export")
-@nox.parametrize("requirements_output_dir", REQUIREMENTS_OUTPUT_DIR)
+@nox.parametrize("requirements_output_dir", REQUIREMENTS_OUTPUT_DIR) # type: ignore
 def export_requirements(session: nox.Session, requirements_output_dir: Path):
     ## Ensure REQUIREMENTS_OUTPUT_DIR path exists
     if not requirements_output_dir.exists():
@@ -151,7 +151,7 @@ def export_requirements(session: nox.Session, requirements_output_dir: Path):
             )
             log.error(msg)
 
-            requirements_output_dir: Path = Path("./")
+            requirements_output_dir: Path = Path("./") # type: ignore
 
     session.install(f"uv")
 
@@ -162,7 +162,7 @@ def export_requirements(session: nox.Session, requirements_output_dir: Path):
         "compile",
         "pyproject.toml",
         "-o",
-        str(REQUIREMENTS_OUTPUT_DIR / "requirements.txt"),
+        str(requirements_output_dir / "requirements.txt"),
     )
 
 
@@ -222,7 +222,7 @@ def run_alembic_migrations(session: nox.Session):
 
 
 @nox.session(python=[DEFAULT_PYTHON], name="alembic-upgrade", tags=["alembic", "db"])
-def run_alembic_migrations(session: nox.Session):
+def run_alembic_upgrade(session: nox.Session):
     # session.install("alembic")
     install_uv_project(session)
 
