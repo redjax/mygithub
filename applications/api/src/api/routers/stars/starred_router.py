@@ -29,10 +29,10 @@ tags: list[t.Union[str, enum.Enum]] = ["stars"]
 router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT, tags=tags)
 
 
-@router.get("/all")
+@router.get("/all", response_model=None)
 def return_all_stars(
     request: Request, page_params: PageParams = Depends()
-) -> JSONResponse | PagedResponseSchema:
+) -> t.Union[JSONResponse, PagedResponseSchema[stars_domain.GithubStarredRepoOut]]:
     session_pool = db_depends.get_session_pool()
 
     starred_repo_out_schemas: list[stars_domain.GithubStarredRepoOut] = []

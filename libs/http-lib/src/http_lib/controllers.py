@@ -238,13 +238,13 @@ class HttpxController(AbstractContextManager):
         self.cache_allow_stale: bool = cache_allow_stale
 
         ## Placeholder for initialized httpx.Client
-        # self.client: httpx.Client | None = None
+        self.client: httpx.Client
         ## Placeholder for hishel cache storage object
-        # self.cache: t.Union[hishel.SQLiteStorage, hishel.FileStorage] | None = None
+        self.cache: t.Union[hishel.SQLiteStorage, hishel.FileStorage] | None
         ## Placeholder for hishel cache controller object
-        # self.cache_controller: hishel.Controller | None = None
+        self.cache_controller: hishel.Controller | None
         ## Placeholder for hishel cache transport object
-        # self.cache_transport: hishel.CacheTransport | None = None
+        self.cache_transport: hishel.CacheTransport | None
 
         ## Class logger
         self.logger: logging.Logger = log.getChild("HttpxController")

@@ -57,9 +57,9 @@ def get_db_uri(
                 port = None
             else:
                 try:
-                    _port: int = int(port)
+                    port: int = int(port) # type: ignore
                 except Exception as exc:
-                    msg = f"({type(exc)}) 'port' must be of type int. Got type: ({type(_port)}), and failed converting to int."
+                    msg = f"({type(exc)}) 'port' must be of type int. Got type: ({type(port)}), and failed converting to int."
                     log.error(msg)
 
                     raise exc
@@ -75,7 +75,7 @@ def get_db_uri(
             username=username,
             password=password,
             host=host,
-            port=_port,
+            port=port,
             database=database,
         )
 

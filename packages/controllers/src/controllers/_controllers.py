@@ -1,17 +1,12 @@
 from __future__ import annotations
 
 from contextlib import AbstractContextManager
-import json
-from pathlib import Path
 import typing as t
 
-import core_utils
-import db_lib
-import depends
 import http_lib
 from loguru import logger as log
-import settings
 
+import httpx
 
 class GithubAPIController(AbstractContextManager):
     def __init__(
@@ -97,7 +92,7 @@ class GithubAPIController(AbstractContextManager):
             with self.http_controller as http_ctl:
                 while url:
                     # Only use params for the first request, after that, use direct URLs from pagination
-                    req = http_lib.build_request(
+                    req: httpx.Request = http_lib.build_request(
                         url=url,
                         headers=headers,
                         params=params
