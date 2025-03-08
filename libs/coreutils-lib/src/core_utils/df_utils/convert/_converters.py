@@ -20,8 +20,8 @@ __all__ = [
 
 
 def convert_csv_to_pq(
-    csv_file: t.Union[str, Path] = None,
-    pq_file: t.Union[str, Path] = None,
+    csv_file: t.Union[str, Path],
+    pq_file: t.Union[str, Path],
     dedupe: bool = False,
 ) -> bool:
     """Read a CSV file into a DataFrame, then write the DataFrame to a Parquet file.
@@ -45,11 +45,11 @@ def convert_csv_to_pq(
         raise ValueError("Missing a Parquet file to save to")
 
     if isinstance(csv_file, str):
-        csv_file: Path = Path(csv_file)
+        _csv: Path = Path(csv_file)
     if isinstance(pq_file, str):
-        pq_file: Path = Path(pq_file)
+        _pq: Path = Path(pq_file)
 
-    if not csv_file.exists():
+    if not _csv.exists():
         raise FileNotFoundError(f"Could not find input CSV file at path: {csv_file}")
 
     try:
@@ -63,7 +63,7 @@ def convert_csv_to_pq(
         raise exc
 
     try:
-        success = save_pq(df=df, pq_file=pq_file, dedupe=dedupe)
+        success = save_pq(df=df, pq_file=_pq, dedupe=dedupe)
 
         return success
 
@@ -77,8 +77,8 @@ def convert_csv_to_pq(
 
 
 def convert_pq_to_csv(
-    pq_file: t.Union[str, Path] = None,
-    csv_file: t.Union[str, Path] = None,
+    pq_file: t.Union[str, Path] | None,
+    csv_file: t.Union[str, Path] | None,
     dedupe: bool = False,
 ) -> bool:
     """Read a Parquet file into a DataFrame, then write the DataFrame to a CSV file.
@@ -102,15 +102,15 @@ def convert_pq_to_csv(
         raise ValueError("Missing an input Parquet file to read from")
 
     if isinstance(csv_file, str):
-        csv_file: Path = Path(csv_file)
+        _csv: Path = Path(csv_file)
     if isinstance(pq_file, str):
-        pq_file: Path = Path(pq_file)
+        _pq: Path = Path(pq_file)
 
-    if not pq_file.exists():
+    if not _pq.exists():
         raise FileNotFoundError(f"Could not find input Parquet file at path: {pq_file}")
 
     try:
-        df = load_pq(pq_file=pq_file)
+        df = load_pq(pq_file=_pq)
     except Exception as exc:
         msg = Exception(
             f"Unhandled exception reading Parquet file '{pq_file}' to DataFrame. Details: {exc}"
@@ -120,7 +120,7 @@ def convert_pq_to_csv(
         raise exc
 
     try:
-        success = save_csv(df=df, csv_file=csv_file, columns=df.columns, dedupe=dedupe)
+        success = save_csv(df=df, csv_file=csv_file, columns=list(df.columns), dedupe=dedupe)
 
         return success
 
