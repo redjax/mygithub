@@ -3,6 +3,7 @@ from __future__ import annotations
 from api.responses import API_RESPONSE_DICT
 
 from .healthcheck import router as healthcheck_router
+from .search.search_router import router as search_router
 
 # from .weather.weather_router import router as weather_router
 from .stars.starred_router import router as stars_router
@@ -17,5 +18,7 @@ prefix: str = "/api/v1"
 
 router: APIRouter = APIRouter(prefix=prefix, responses=API_RESPONSE_DICT)
 
-router.include_router(healthcheck_router)
-router.include_router(stars_router)
+INCLUDE_ROUTERS: list[APIRouter] = [healthcheck_router, stars_router, search_router]
+
+for _router in INCLUDE_ROUTERS:
+    router.include_router(_router)

@@ -19,10 +19,10 @@ class GithubStarsAPIResponseModel(db_lib.base.Base):
     json_data: so.Mapped[list[dict]] = so.mapped_column(JSON, nullable=False)
 
     created_at: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), index=True
+        sa.TIMESTAMP, server_default=sa.func.now(), index=True, nullable=True
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True
+        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True, nullable=True
     )
 
 
@@ -34,11 +34,11 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
 
     repo_id: so.Mapped[db_lib.annotated.INT_PK]
 
-    created_at: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), index=True
+    created: so.Mapped[datetime] = so.mapped_column(
+        sa.TIMESTAMP, server_default=sa.func.now(), index=True, nullable=True
     )
-    updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True
+    last_updated: so.Mapped[datetime] = so.mapped_column(
+        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True, nullable=True
     )
 
     owner_id: so.Mapped[int] = so.mapped_column(
@@ -49,14 +49,16 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     )
 
     id: so.Mapped[int] = so.mapped_column(sa.NUMERIC, nullable=False, default=0)
-    node_id: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
+    node_id: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False, index=True)
     name: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False, index=True)
     private: so.Mapped[bool] = so.mapped_column(
-        sa.BOOLEAN, nullable=True, default=False
+        sa.BOOLEAN, nullable=True, default=False, index=True
     )
     html_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
-    description: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True)
-    fork: so.Mapped[bool] = so.mapped_column(sa.BOOLEAN, nullable=True, default=False)
+    description: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=True, index=True)
+    fork: so.Mapped[bool] = so.mapped_column(
+        sa.BOOLEAN, nullable=True, default=False, index=True
+    )
     url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     forks_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)
     keys_url: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False)

@@ -149,5 +149,5 @@ class GithubStarredRepoIn(GithubStarredRepoBase):
 class GithubStarredRepoOut(GithubStarredRepoBase):
     repo_id: int
 
-    created_at: datetime
-    updated_at: datetime
+    created_at: str
+    updated_at: str

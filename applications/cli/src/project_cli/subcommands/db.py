@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import typing as t
 
+from cli_spinners import CustomSpinner
 from cyclopts import App, Group, Parameter
 from depends import db_depends
 from domain.github import stars as stars_domain
@@ -13,8 +14,6 @@ import setup
 import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.sql as sa_sql
-
-from cli_spinners import CustomSpinner
 
 __all__ = [
     "db_app",
@@ -49,13 +48,13 @@ def _init_db():
 @db_app.command(name="show")
 def show_db_info(
     option: t.Annotated[
-        str, Parameter(name="option", show_default=True, help="Options: ['tables']")
+        str, Parameter(name="option", show_default=True, help="Options: ['tables', 'driver']")
     ],
 ):
     """Show information about the database.
 
     Params:
-        option: The option to show information about. Options: ['tables']
+        option: The option to show information about. Options: ['tables', 'driver']
 
     """
     log.info(f"Showing database info: {option}")
@@ -83,6 +82,24 @@ def show_db_info(
                     return
             except sa_exc.SQLAlchemyError as e:
                 print(f"Error inspecting database: {e}")
+                
+        case "driver":
+            inspector = sa.inspect(engine)
+            
+            url = engine.url
+            
+            print(f"Database type: {url.get_backend_name().title()}")
+            print(f"Driver: {url.get_driver_name().title()}")
+            print(f"Database URL: {url}")
+            
+            if url.host:
+                print(f"Host: {url.host}")
+            if url.port:
+                print(f"Port: {url.port}")
+            if url.database:
+                print(f"Database: {url.database}")
+            if url.username:
+                print(f"Username: {url.username}")
 
         case _:
             log.error(f"Unknown option: {option}")
