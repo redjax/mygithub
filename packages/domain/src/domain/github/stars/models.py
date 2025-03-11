@@ -19,10 +19,10 @@ class GithubStarsAPIResponseModel(db_lib.base.Base):
     json_data: so.Mapped[list[dict]] = so.mapped_column(JSON, nullable=False)
 
     created_at: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), index=True
+        sa.TIMESTAMP, server_default=sa.func.now(), index=True, nullable=True
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True
+        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True, nullable=True
     )
 
 
@@ -35,10 +35,10 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     repo_id: so.Mapped[db_lib.annotated.INT_PK]
 
     created: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), index=True
+        sa.TIMESTAMP, server_default=sa.func.now(), index=True, nullable=True
     )
     last_updated: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True
+        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True, nullable=True
     )
 
     owner_id: so.Mapped[int] = so.mapped_column(
