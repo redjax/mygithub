@@ -13,6 +13,8 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from typing_extensions import Annotated
 
+__all__ = ["INT_PK", "STR_10", "STR_255"]
+
 ## Annotated auto-incrementing integer primary key column
 INT_PK = Annotated[
     int, so.mapped_column(sa.INTEGER, primary_key=True, autoincrement=True, unique=True)

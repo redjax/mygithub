@@ -11,6 +11,15 @@ import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 import sqlalchemy.sql as sa_sql
 
+__all__ = [
+    "get_db_uri",
+    "get_engine",
+    "get_session_pool",
+    "create_base_metadata",
+    "count_table_rows",
+    "show_table_names",
+]
+
 
 def get_db_uri(
     drivername: str,
