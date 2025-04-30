@@ -8,6 +8,8 @@ from loguru import logger as log
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
+__all__ = ["setup_database"]
+
 
 def setup_database(
     sqla_base: so.DeclarativeBase = db.Base,
