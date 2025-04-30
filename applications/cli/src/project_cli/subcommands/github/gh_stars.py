@@ -44,13 +44,15 @@ def get_user_stars(
             "save-json", show_default=True, help="Save the results to a json file."
         ),
     ] = False,
-    json_file: t.Annotated[
-        str,
-        Parameter(
-            "json-file", show_default=True, help="The file to save the results to."
-        ),
-    ]
-    | None = "starred.json",
+    json_file: (
+        t.Annotated[
+            str,
+            Parameter(
+                "json-file", show_default=True, help="The file to save the results to."
+            ),
+        ]
+        | None
+    ) = "starred.json",
     use_cache: t.Annotated[bool, Parameter("use-cache", show_default=True)] = True,
     cache_ttl: t.Annotated[int, Parameter("cache-ttl", show_default=True)] = 3600,
 ):
@@ -69,53 +71,16 @@ def get_user_stars(
             )
 
     try:
-        with CustomSpinner("Getting user's starred repositories...") as spinner:
-            starred_repos: list[dict] = gh_client.get_starred_repos(
-                api_token=api_token, use_cache=use_cache, cache_ttl=cache_ttl
-            )
+        gh_client.get_user_stars(
+            api_token=api_token,
+            save_db=save_db,
+            save_json=save_json,
+            json_file=json_file,
+            use_cache=use_cache,
+            cache_ttl=cache_ttl,
+        )
     except Exception as exc:
-        msg = f"({type(exc)}) Error getting user's starred repositories. Details: {exc}"
-        log.error(msg)
-
-        return
-
-    log.info(f"Requested [{len(starred_repos)}] starred repo(s) from Github")
-
-    if save_db:
-        log.info("Saving requested repositories to database")
-
-        log.info(f"Saving [{len(starred_repos)}] starred repositories to database...")
-        try:
-            with CustomSpinner(
-                f"Saving [{len(starred_repos)}] starred repositories to database..."
-            ):
-                saved_stars = gh_client.save_github_stars(starred_repos=starred_repos)
-                log.success(f"Saved starred repositories to database")
-        except Exception as exc:
-            msg = f"({type(exc)}) Error saving starred repositories to database. Details: {exc}"
-            log.error(msg)
-
-            return
-
-    if save_json:
-        if json_file is None:
-            json_file = "starred.json"
-
-        json_file: Path = Path(json_file)
-
-        if json_file.exists():
-            log.warning(
-                f"JSON file '{json_file}' already exists and will be overwritten"
-            )
-
-        try:
-            json_data = json.dumps(starred_repos, indent=4, default=str, sort_keys=True)
-            with open(json_file, "w") as f:
-                f.write(json_data)
-
-            log.success(f"Saved starred repositories to {json_file}")
-        except Exception as exc:
-            msg = f"({type(exc)}) Error saving starred repositories to {json_file}. Details: {exc}"
-            log.error(msg)
-
-            return
+        log.error(
+            f"({type(exc)}) Error getting user's starred repositories. Details: {exc}"
+        )
+        raise exc
