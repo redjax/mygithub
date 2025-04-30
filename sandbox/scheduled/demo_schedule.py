@@ -4,7 +4,7 @@ from settings import LOGGING_SETTINGS
 import setup
 import schedule
 import settings
-from project_cli.subcommands import github as gh
+import gh_client
 
 
 def job(
@@ -16,7 +16,7 @@ def job(
     cache_ttl: int = 3600,
 ):
     try:
-        gh_stars_job = gh.get_user_stars(
+        gh_stars_job = gh_client.get_user_stars(
             api_token=api_token,
             save_db=save_db,
             save_json=save_json,

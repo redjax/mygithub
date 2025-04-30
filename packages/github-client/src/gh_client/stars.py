@@ -4,12 +4,16 @@ import json
 from pathlib import Path
 import typing as t
 
+from cli_spinners import CustomSpinner
 from controllers import GithubAPIController
 from depends import db_depends
 from domain.github import stars as stars_domain
 from loguru import logger as log
 import settings
 import sqlalchemy.exc as sa_exc
+
+
+__all__ = ["get_starred_repos", "save_github_stars", "get_user_stars"]
 
 
 def get_starred_repos(
@@ -138,8 +142,10 @@ def save_github_stars(
 
             ## Convert owner schema to DB model
             try:
-                repo_owner: stars_domain.GithubRepositoryOwnerModel = stars_domain.converters.convert_github_repository_owner_schema_to_db_model(
-                    owner=repo_owner_schema
+                repo_owner: stars_domain.GithubRepositoryOwnerModel = (
+                    stars_domain.converters.convert_github_repository_owner_schema_to_db_model(
+                        owner=repo_owner_schema
+                    )
                 )
             except Exception as exc:
                 msg = f"({type(exc)}) Error converting repository owner schema to DB model. Details: {exc}"
@@ -160,8 +166,10 @@ def save_github_stars(
 
             ## Convert starred repository schema to DB model
             try:
-                github_repo: stars_domain.GithubStarredRepositoryModel = stars_domain.converters.convert_github_starred_repo_schema_to_db_model(
-                    github_repo_schema
+                github_repo: stars_domain.GithubStarredRepositoryModel = (
+                    stars_domain.converters.convert_github_starred_repo_schema_to_db_model(
+                        github_repo_schema
+                    )
                 )
             except Exception as exc:
                 msg = f"({type(exc)}) Error converting starred repository schema to DB model. Details: {exc}"
@@ -198,3 +206,81 @@ def save_github_stars(
     )
 
     return saved_repos
+
+
+def get_user_stars(
+    api_token: str,
+    save_db: bool,
+    save_json: bool,
+    json_file: str = "starred.json",
+    use_cache: bool = True,
+    cache_ttl: int = 3600,
+):
+    """Get starred repositories associated with Github PAT.
+
+    Description:
+        Joins the get_starred_repos() and save_github_stars() functions into a single call.
+
+    Params:
+        api_token (str): The Github PAT to use with the API. If not provided, will look for a value in your config/.secrets.local.toml, or set the GH_API_TOKEN environment variable.
+        use_cache (bool): (default: True) Use cached data if available.
+        cache_ttl (int): (default: 900) Time to live for cached data.
+    """
+    if api_token is None:
+        api_token = settings.GITHUB_SETTINGS.get("GH_API_TOKEN")
+        if api_token is None:
+            raise ValueError(
+                "Missing a Github PAT to use with the API. Please set a value in your config/.secrets.local.toml, or set the GH_API_TOKEN environment variable."
+            )
+
+    try:
+        with CustomSpinner("Getting user's starred repositories...") as spinner:
+            starred_repos: list[dict] = get_starred_repos(
+                api_token=api_token, use_cache=use_cache, cache_ttl=cache_ttl
+            )
+    except Exception as exc:
+        msg = f"({type(exc)}) Error getting user's starred repositories. Details: {exc}"
+        log.error(msg)
+
+        return
+
+    log.info(f"Requested [{len(starred_repos)}] starred repo(s) from Github")
+
+    if save_db:
+        log.info("Saving requested repositories to database")
+
+        log.info(f"Saving [{len(starred_repos)}] starred repositories to database...")
+        try:
+            with CustomSpinner(
+                f"Saving [{len(starred_repos)}] starred repositories to database..."
+            ):
+                saved_stars = save_github_stars(starred_repos=starred_repos)
+                log.success(f"Saved starred repositories to database")
+        except Exception as exc:
+            msg = f"({type(exc)}) Error saving starred repositories to database. Details: {exc}"
+            log.error(msg)
+
+            return
+
+    if save_json:
+        if json_file is None:
+            json_file = "starred.json"
+
+        json_file: Path = Path(json_file)
+
+        if json_file.exists():
+            log.warning(
+                f"JSON file '{json_file}' already exists and will be overwritten"
+            )
+
+        try:
+            json_data = json.dumps(starred_repos, indent=4, default=str, sort_keys=True)
+            with open(json_file, "w") as f:
+                f.write(json_data)
+
+            log.success(f"Saved starred repositories to {json_file}")
+        except Exception as exc:
+            msg = f"({type(exc)}) Error saving starred repositories to {json_file}. Details: {exc}"
+            log.error(msg)
+
+            return
