@@ -12,6 +12,8 @@ import http_lib
 from loguru import logger as log
 import settings
 
+__all__ = ["GithubAPIController"]
+
 
 class GithubAPIController(AbstractContextManager):
     def __init__(
@@ -100,9 +102,9 @@ class GithubAPIController(AbstractContextManager):
                     req = http_lib.build_request(
                         url=url,
                         headers=headers,
-                        params=params
-                        if url == f"{self.base_url}/user/starred"
-                        else None,
+                        params=(
+                            params if url == f"{self.base_url}/user/starred" else None
+                        ),
                     )
                     res = http_ctl.send_request(req)
                     log.debug(f"Next page links: {res.links}")

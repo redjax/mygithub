@@ -5,6 +5,9 @@ import sys
 from loguru import logger
 
 
+__all__ = ["setup_loguru_logging"]
+
+
 def filter_info_debug_warning(record):
     """Filter out INFO, DEBUG, and WARNING messages.
 
@@ -98,8 +101,12 @@ def setup_loguru_logging(
         "<blue>{time:YY-MM-DD HH:mm:ss}</> [<yellow>{level}</>]: {message}"
     )
 
-    fmt_detailed: str = "{time:YYYY-MM-DD HH:mm:ss} | [{level}] | ({module}.{function}:{line}) | > {message}"
-    fmt_detailed_color: str = "<blue>{time:YYYY-MM-DD HH:mm:ss}</> | [<yellow>{level}</>] | (<cyan>{module}.{function}:{line}</>) | > {message}"
+    fmt_detailed: str = (
+        "{time:YYYY-MM-DD HH:mm:ss} | [{level}] | ({module}.{function}:{line}) | > {message}"
+    )
+    fmt_detailed_color: str = (
+        "<blue>{time:YYYY-MM-DD HH:mm:ss}</> | [<yellow>{level}</>] | (<cyan>{module}.{function}:{line}</>) | > {message}"
+    )
 
     match log_fmt.lower():
         case "basic":
