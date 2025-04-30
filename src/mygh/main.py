@@ -21,28 +21,19 @@ def main(
     save_json: bool = False,
     json_file: t.Union[str, Path] = "starred.json",
 ):
-    log.debug("Setting up Github API controller")
-    gh_api_controller: GithubAPIController = GithubAPIController(
-        api_token=api_token, cache_ttl=10800
-    )
-
-    with gh_api_controller as gh:
-        starred_repos = gh.get_user_stars()
-
-    log.debug(f"Found [{len(starred_repos)}] starred repositories.")
-
-    log.info("Saving repositories to starred.json")
-    with open(str(json_file), "w") as f:
-        _data = json.dumps(starred_repos, indent=4, sort_keys=True, default=str)
-        f.write(_data)
-
     try:
-        saved_stars = gh_client.save_github_stars(starred_repos=starred_repos)
-        log.debug(f"Saved [{len(saved_stars)}] github stars to database")
+        gh_client.get_user_stars(
+            api_token=api_token,
+            save_json=True,
+            json_file="starred.json",
+            save_db=True,
+            use_cache=True,
+            cache_ttl=900,
+        )
     except Exception as exc:
-        msg = f"({type(exc)}) Error saving github stars to database. Details: {exc}"
-        log.error(msg)
-
+        log.error(
+            f"({type(exc)}) Error requesting & saving user's starred repos. Details: {exc}"
+        )
         raise
 
 
