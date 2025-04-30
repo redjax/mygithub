@@ -14,6 +14,11 @@ import sqlalchemy as sa
 import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 
+__all__ = [
+    "GithubStarredRepositoryDBRepository",
+    "GithubStarsAPIResponseRepository",
+]
+
 
 class GithubStarsAPIResponseRepository(
     db_lib.base.BaseRepository[GithubStarsAPIResponseModel]

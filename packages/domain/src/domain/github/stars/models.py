@@ -10,6 +10,12 @@ import sqlalchemy.exc as sa_exc
 import sqlalchemy.orm as so
 from sqlalchemy.types import JSON
 
+__all__ = [
+    "GithubRepositoryOwnerModel",
+    "GithubStarredRepositoryModel",
+    "GithubStarsAPIResponseModel",
+]
+
 
 class GithubStarsAPIResponseModel(db_lib.base.Base):
     __tablename__ = "gh_stars_api_response"

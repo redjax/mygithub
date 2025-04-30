@@ -13,6 +13,8 @@ from loguru import logger as log
 import settings
 import setup
 
+__all__ = ["main"]
+
 
 def main(
     api_token: str,
