@@ -10,7 +10,7 @@ from .stars.starred_router import router as stars_router
 
 from fastapi import APIRouter
 from loguru import logger as log
-from settings.api_settings import FASTAPI_SETTINGS
+from settings import FASTAPI_SETTINGS
 
 __all__ = ["router"]
 

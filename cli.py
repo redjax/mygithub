@@ -3,7 +3,7 @@ from __future__ import annotations
 from cyclopts import App
 from loguru import logger as log
 from project_cli import app as cli_app
-from settings.logging_settings import LOGGING_SETTINGS
+from settings import LOGGING_SETTINGS
 import setup
 
 

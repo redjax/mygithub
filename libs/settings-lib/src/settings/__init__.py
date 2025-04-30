@@ -1,8 +1,13 @@
 from __future__ import annotations
 
-from .api_settings import FASTAPI_SETTINGS, UVICORN_SETTINGS
-from .app_settings import APP_SETTINGS
-from .celery_settings import CELERY_SETTINGS
-from .db_settings import DB_SETTINGS
-from .logging_settings import LOGGING_SETTINGS
-from .github_settings import GITHUB_SETTINGS
+from ._settings import (
+    FASTAPI_SETTINGS,
+    UVICORN_SETTINGS,
+    APP_SETTINGS,
+    CELERY_SETTINGS,
+    DB_SETTINGS,
+    LOGGING_SETTINGS,
+    GITHUB_SETTINGS,
+)
+
+from .base import SETTINGS, get_namespace

@@ -1,3 +1,4 @@
 from __future__ import annotations
 
-from .main import gh_app
+from .main import *
+from .gh_stars import *

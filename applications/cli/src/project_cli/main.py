@@ -11,6 +11,8 @@ from .subcommands.github import gh_app
 from cyclopts import App, Group, Parameter
 from loguru import logger as log
 
+__all__ = ["app", "cli_launcher"]
+
 app = App(name="mygithub", help="CLI for MyGithub Python app.")
 
 app.meta.group_parameters = Group("Session Parameters", sort_key=0)
@@ -28,15 +30,17 @@ def cli_launcher(
     debug: t.Annotated[
         bool, Parameter("--debug", show_default=True, help="Enable debug logging.")
     ] = False,
-    log_file: t.Annotated[
-        str,
-        Parameter(
-            "--log-file",
-            show_default=True,
-            help="Path to a file where logs will be saved. Default is None.",
-        ),
-    ]
-    | None = None,
+    log_file: (
+        t.Annotated[
+            str,
+            Parameter(
+                "--log-file",
+                show_default=True,
+                help="Path to a file where logs will be saved. Default is None.",
+            ),
+        ]
+        | None
+    ) = None,
 ):
     """CLI entrypoint.
 
