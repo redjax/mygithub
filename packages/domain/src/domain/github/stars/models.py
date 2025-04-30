@@ -22,7 +22,11 @@ class GithubStarsAPIResponseModel(db_lib.base.Base):
         sa.TIMESTAMP, server_default=sa.func.now(), index=True, nullable=True
     )
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True, nullable=True
+        sa.TIMESTAMP,
+        server_default=sa.func.now(),
+        onupdate=sa.func.now(),
+        index=True,
+        nullable=True,
     )
 
 
@@ -38,7 +42,11 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
         sa.TIMESTAMP, server_default=sa.func.now(), index=True, nullable=True
     )
     last_updated: so.Mapped[datetime] = so.mapped_column(
-        sa.TIMESTAMP, server_default=sa.func.now(), onupdate=sa.func.now(), index=True, nullable=True
+        sa.TIMESTAMP,
+        server_default=sa.func.now(),
+        onupdate=sa.func.now(),
+        index=True,
+        nullable=True,
     )
 
     owner_id: so.Mapped[int] = so.mapped_column(
@@ -145,7 +153,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     open_issues_count: so.Mapped[int] = so.mapped_column(
         sa.NUMERIC, nullable=False, default=0, index=True
     )
-    license: so.Mapped[dict] = so.mapped_column(JSON, nullable=True, index=True)
+    license: so.Mapped[dict] = so.mapped_column(JSON, nullable=True)
     allow_forking: so.Mapped[bool] = so.mapped_column(
         sa.BOOLEAN, nullable=True, default=False
     )
@@ -159,7 +167,7 @@ class GithubStarredRepositoryModel(db_lib.base.Base):
     topics: so.Mapped[list[str]] = so.mapped_column(
         ## Store as TEXT in SQLite, JSON elsewhere
         sa.JSON().with_variant(sa.Text, "sqlite"),
-        index=True,
+        # index=True,
     )
     visibility: so.Mapped[str] = so.mapped_column(sa.TEXT, nullable=False, index=True)
     forks: so.Mapped[int] = so.mapped_column(

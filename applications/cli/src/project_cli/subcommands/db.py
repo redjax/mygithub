@@ -21,7 +21,7 @@ __all__ = [
     "SEED_DATA_DIR",
     "show_db_info",
     "count_db_rows",
-    "test_db",
+    "test_db_connection",
 ]
 
 db_app = App(name="db", help="CLI for managing the database.")
@@ -48,7 +48,10 @@ def _init_db():
 @db_app.command(name="show")
 def show_db_info(
     option: t.Annotated[
-        str, Parameter(name="option", show_default=True, help="Options: ['tables', 'driver']")
+        str,
+        Parameter(
+            name="option", show_default=True, help="Options: ['tables', 'driver']"
+        ),
     ],
 ):
     """Show information about the database.
@@ -82,16 +85,16 @@ def show_db_info(
                     return
             except sa_exc.SQLAlchemyError as e:
                 print(f"Error inspecting database: {e}")
-                
+
         case "driver":
             inspector = sa.inspect(engine)
-            
+
             url = engine.url
-            
+
             print(f"Database type: {url.get_backend_name().title()}")
             print(f"Driver: {url.get_driver_name().title()}")
             print(f"Database URL: {url}")
-            
+
             if url.host:
                 print(f"Host: {url.host}")
             if url.port:

@@ -12,6 +12,8 @@ from alembic.script import ScriptDirectory
 
 from loguru import logger as log
 
+__all__ = ["AlembicController"]
+
 
 class AlembicController(AbstractContextManager):
     """Context manager for Alembic operations.
