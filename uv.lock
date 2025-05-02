@@ -15,6 +15,7 @@ members = [
     "github-client",
     "http-lib",
     "mygithub",
+    "scheduling",
     "settings-lib",
     "setup-lib",
     "spinner-lib",
@@ -742,6 +743,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pymysql" },
     { name = "schedule" },
+    { name = "scheduling" },
     { name = "settings-lib" },
     { name = "setup-lib" },
     { name = "spinner-lib" },
@@ -780,6 +782,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.10.6" },
     { name = "pymysql", specifier = ">=1.1.1" },
     { name = "schedule", specifier = ">=1.2.2" },
+    { name = "scheduling", editable = "packages/schedule-lib" },
     { name = "settings-lib", editable = "libs/settings-lib" },
     { name = "setup-lib", editable = "libs/setup-lib" },
     { name = "spinner-lib", editable = "libs/spinner-lib" },
@@ -1235,6 +1238,17 @@ sdist = { url = "https://files.pythonhosted.org/packages/0c/91/b525790063015759f
 wheels = [
     { url = "https://files.pythonhosted.org/packages/20/a7/84c96b61fd13205f2cafbe263cdb2745965974bdf3e0078f121dfeca5f02/schedule-1.2.2-py3-none-any.whl", hash = "sha256:5bef4a2a0183abf44046ae0d164cadcac21b1db011bdd8102e4a0c1e91e06a7d", size = 12220 },
 ]
+
+[[package]]
+name = "scheduling"
+version = "0.1.0"
+source = { editable = "packages/schedule-lib" }
+dependencies = [
+    { name = "schedule" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "schedule", specifier = ">=1.2.2" }]
 
 [[package]]
 name = "settings-lib"

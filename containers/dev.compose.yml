@@ -1,0 +1,160 @@
+---
+volumes:
+  redis_data:
+  rabbitmq_data:
+
+networks:
+  mygithub_devnet:
+
+services:
+  alembic_migrate:
+    container_name: ${CELERY_BEAT_CONTAINER_NAME:-mygithub_alembic_migrate}-dev
+    restart: no
+    build:
+      context: ..
+      dockerfile: ./containers/dockerfiles/dev.Dockerfile
+      target: alembic_migrate
+    working_dir: /project
+    env_file:
+      - ./envs/dev.app.env
+    # ## Uncomment for debugging
+    # # command: ["/bin/bash"]
+    volumes:
+      - ../applications:/project/applications
+      - ../packages:/project/packages
+      - ../scripts:/project/scripts
+      - ../src:/project/src
+      - ./container_data/mygithub/db:/mygithub/db
+      - ../migrations:/project/migrations
+      - ../alembic.ini:/project/alembic.ini
+    networks:
+      - mygithub_devnet
+
+  # celery_beat:
+  #   container_name: ${CELERY_BEAT_CONTAINER_NAME:-mygithub_celery_beat}-dev
+  #   restart: unless-stopped
+  #   build:
+  #     context: ..
+  #     dockerfile: ./containers/dockerfiles/dev.Dockerfile
+  #     target: celery_beat
+  #   working_dir: /project
+  #   # user: appuser
+  #   depends_on:
+  #     - rabbitmq
+  #     - redis
+  #     - alembic_migrate
+  #   env_file:
+  #     - ./envs/dev.app.env
+  #   command: ["uv", "run", "scripts/celery/start_celery.py", "-m", "beat"]
+  #   # ## Uncomment for debugging
+  #   # # command: ["/bin/bash"]
+  #   volumes:
+  #     - ../applications:/project/applications
+  #     - ../packages:/project/packages
+  #     - ../scripts:/project/scripts
+  #     - ../src:/project/src
+  #     - ./container_data/mygithub/db:/mygithub/db
+  #   networks:
+  #     - mygithub_devnet
+
+  # celery_worker:
+  #   container_name: ${CELERY_WORKER_CONTAINER_NAME:-mygithub_celery_worker}-dev
+  #   restart: unless-stopped
+  #   build:
+  #     context: ..
+  #     dockerfile: ./containers/dockerfiles/dev.Dockerfile
+  #     target: celery_worker
+  #   working_dir: /project
+  #   # user: appuser
+  #   depends_on:
+  #     - rabbitmq
+  #     - redis
+  #     - alembic_migrate
+  #   env_file:
+  #     - ./envs/dev.app.env
+  #   command: ["uv", "run", "scripts/celery/start_celery.py", "-m", "worker"]
+  #   # command: ["uv", "run", "scripts/debug/debug_settings.py"]
+  #   volumes:
+  #     - ../applications:/project/applications
+  #     - ../packages:/project/packages
+  #     - ../scripts:/project/scripts
+  #     - ../src:/project/src
+  #     - ./container_data/mygithub/celery_worker/logs:/project/logs
+  #   networks:
+  #     - mygithub_devnet
+
+  # redis:
+  #   image: redis:alpine
+  #   container_name: mygithub_redis-dev
+  #   restart: unless-stopped
+  #   command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:-redis}"]
+  #   env_file:
+  #     - ./envs/dev.messaging.env
+  #   environment:
+  #     REDIS_PASSWORD: ${REDIS_PASSWORD:-redis}
+  #   volumes:
+  #     - ${REDIS_DATA_DIR:-redis_data}:/data
+  #   ports:
+  #     - ${REDIS_PORT:-6379}:6379
+  #   networks:
+  #     - mygithub_devnet
+
+  # redis-commander:
+  #   image: rediscommander/redis-commander:latest
+  #   container_name: mygithub_redis-commander-dev
+  #   restart: unless-stopped
+  #   env_file:
+  #     - ./envs/dev.messaging.env
+  #   environment:
+  #     REDIS_HOSTS: redis
+  #     REDIS_HOST: redis
+  #     REDIS_PORT: redis:6379
+  #     REDIS_PASSWORD: ${REDIS_PASSWORD:-redis}
+  #     HTTP_USER: ${REDIS_COMMANDER_HTTP_USER:-admin}
+  #     HTTP_PASSWORD: ${REDIS_COMMANDER_HTTP_PASSWORD:-admin}
+  #   ports:
+  #     - ${REDIS_COMMANDER_PORT:-8081}:8081
+  #   depends_on:
+  #     - redis
+  #   networks:
+  #     - mygithub_devnet
+
+  # rabbitmq:
+  #   image: rabbitmq:management
+  #   container_name: mygithub_rabbitmq-dev
+  #   restart: unless-stopped
+  #   env_file:
+  #     - ./envs/dev.messaging.env
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-rabbitmq}
+  #     RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-rabbitmq}
+  #     RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-rabbitmq}
+  #   volumes:
+  #     - ${RABBITMQ_DATA_DIR:-rabbitmq_data}:/var/lib/rabbitmq
+  #   ports:
+  #     - ${RABBITMQ_AMPQ_PORT:-5672}:5672
+  #     - ${RABBITMQ_HTTP_PORT:-15672}:15672
+  #   networks:
+  #     - mygithub_devnet
+
+  mygithub:
+    container_name: mygithub_scheduler-dev
+    restart: unless-stopped
+    build:
+      context: ..
+      dockerfile: ./containers/dockerfiles/dev.Dockerfile
+      target: scheduler
+    working_dir: /project
+    env_file:
+      - ./envs/dev.app.env
+    command: ["uv", "run", "scripts/schedules/every_15th_minute_get_stars.py", "-m", "beat"]
+    # command: ["uv", "run", "scripts/debug/debug_settings.py"]
+    volumes:
+      - ../alembic:/project/alembic
+      - ../applications:/project/applications
+      - ../packages:/project/packages
+      - ../scripts:/project/scripts
+      - ../src:/project/src
+      - ./container_data/mygithub/scheduler/logs:/project/logs
+    networks:
+      - mygithub_devnet

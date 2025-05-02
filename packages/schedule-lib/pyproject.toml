@@ -1,0 +1,17 @@
+[project]
+name = "scheduling"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [{ name = "redjax", email = "no@none.com" }]
+requires-python = ">=3.12"
+dependencies = [
+    "schedule>=1.2.2",
+]
+
+[project.scripts]
+schedule-lib = "scheduling:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

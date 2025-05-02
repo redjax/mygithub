@@ -1,0 +1,4 @@
+container_data/*
+
+!container_data/
+!container_data/.gitkeep
