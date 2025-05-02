@@ -12,6 +12,7 @@
         "./packages/domain/src",
         "./packages/controllers/src",
         "./packages/github-client/src",
-        "./packages/datalab/src"
+        "./packages/datalab/src",
+        "./packages/schedule-lib/src"
     ]
 }
